@@ -8,6 +8,7 @@ import { Tabs, TabList, Tab, TabPanel } from "./components/Tabs";
 import { Alert } from "./components/Alert";
 import { Avatar } from "./components/Avatar";
 import { Badge } from "./components/Badge";
+import { Input } from "./components/Input";
 import { CheckCircle, AlertTriangle, XCircle, Bell } from "lucide-react";
 import { useState } from "react";
 
@@ -49,6 +50,14 @@ export default function Home() {
     info: true,
   });
 
+  const [inputValues, setInputValues] = useState({
+    error: "Invalid value",
+    disabled: "Disabled input",
+    password: "",
+    number: "",
+    date: "",
+  });
+
   const handleSwitchChange =
     (key: keyof typeof switches) => (checked: boolean) => {
       setSwitches((prev) => ({ ...prev, [key]: checked }));
@@ -79,6 +88,12 @@ export default function Home() {
   const dismissAlert = (type: keyof typeof showAlerts) => {
     setShowAlerts((prev) => ({ ...prev, [type]: false }));
   };
+
+  const handleInputChange =
+    (key: keyof typeof inputValues) =>
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setInputValues((prev) => ({ ...prev, [key]: e.target.value }));
+    };
 
   return (
     <div className="min-h-screen p-8 sm:p-20">
@@ -1011,6 +1026,102 @@ export default function Home() {
                 <Badge variant="primary" isStatus>
                   Busy
                 </Badge>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Input Component Demo */}
+        <section>
+          <h2 className="app-h2 mb-8">Input Component</h2>
+          <div className="space-y-8">
+            {/* Basic Input */}
+            <div className="space-y-2">
+              <h3 className="app-h3 text-text-secondary">Basic Input</h3>
+              <div className="max-w-sm">
+                <Input placeholder="Enter your text here" />
+              </div>
+            </div>
+
+            {/* Input with Label */}
+            <div className="space-y-2">
+              <h3 className="app-h3 text-text-secondary">Input with Label</h3>
+              <div className="max-w-sm">
+                <Input
+                  label="Email Address"
+                  placeholder="Enter your email"
+                  type="email"
+                />
+              </div>
+            </div>
+
+            {/* Size Variants */}
+            <div className="space-y-2">
+              <h3 className="app-h3 text-text-secondary">Size Variants</h3>
+              <div className="max-w-sm space-y-4">
+                <Input
+                  size="sm"
+                  placeholder="Small input"
+                  label="Small Input"
+                />
+                <Input
+                  size="md"
+                  placeholder="Medium input"
+                  label="Medium Input"
+                />
+                <Input
+                  size="lg"
+                  placeholder="Large input"
+                  label="Large Input"
+                />
+              </div>
+            </div>
+
+            {/* Input States */}
+            <div className="space-y-2">
+              <h3 className="app-h3 text-text-secondary">Input States</h3>
+              <div className="max-w-sm space-y-4">
+                <Input
+                  label="Error State"
+                  placeholder="Error input"
+                  error="This field is required"
+                  value={inputValues.error}
+                  onChange={handleInputChange("error")}
+                />
+                <Input
+                  label="Disabled State"
+                  placeholder="Disabled input"
+                  disabled
+                  value={inputValues.disabled}
+                  onChange={handleInputChange("disabled")}
+                />
+              </div>
+            </div>
+
+            {/* Input Types */}
+            <div className="space-y-2">
+              <h3 className="app-h3 text-text-secondary">Input Types</h3>
+              <div className="max-w-sm space-y-4">
+                <Input
+                  type="password"
+                  label="Password"
+                  placeholder="Enter your password"
+                  value={inputValues.password}
+                  onChange={handleInputChange("password")}
+                />
+                <Input
+                  type="number"
+                  label="Number"
+                  placeholder="Enter a number"
+                  value={inputValues.number}
+                  onChange={handleInputChange("number")}
+                />
+                <Input
+                  type="date"
+                  label="Date"
+                  value={inputValues.date}
+                  onChange={handleInputChange("date")}
+                />
               </div>
             </div>
           </div>
