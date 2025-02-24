@@ -1,3 +1,5 @@
+import { Button } from "./components/Button";
+
 export default function Home() {
   return (
     <div className="min-h-screen p-8 sm:p-20">
@@ -208,6 +210,54 @@ export default function Home() {
                     Border: var(--border-heavy)
                   </span>
                 </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Button Component Demo */}
+        <section>
+          <h2 className="app-h2 mb-8">Button Component</h2>
+          <div className="space-y-8">
+            {/* Primary Buttons */}
+            <div className="space-y-2">
+              <h3 className="app-h3 text-text-secondary">Primary Buttons</h3>
+              <div className="flex gap-4 items-center">
+                <Button size="sm">Small</Button>
+                <Button size="md">Medium</Button>
+                <Button size="lg">Large</Button>
+              </div>
+            </div>
+
+            {/* Secondary Buttons */}
+            <div className="space-y-2">
+              <h3 className="app-h3 text-text-secondary">Secondary Buttons</h3>
+              <div className="flex gap-4 items-center">
+                <Button variant="secondary" size="sm">
+                  Small
+                </Button>
+                <Button variant="secondary" size="md">
+                  Medium
+                </Button>
+                <Button variant="secondary" size="lg">
+                  Large
+                </Button>
+              </div>
+            </div>
+
+            {/* Disabled Buttons */}
+            <div className="space-y-2">
+              <h3 className="app-h3 text-text-secondary">Disabled Buttons</h3>
+              <div className="flex gap-4 items-center">
+                <Button disabled size="sm">
+                  Small
+                </Button>
+                <Button disabled size="md">
+                  Medium
+                </Button>
+                <Button disabled size="lg">
+                  Large
+                </Button>
               </div>
             </div>
           </div>
