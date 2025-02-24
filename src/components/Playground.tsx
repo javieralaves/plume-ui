@@ -174,35 +174,39 @@ export function Playground({ className }: PlaygroundProps) {
                 <div className="space-y-4">
                   {componentConfig.properties.map((prop) => (
                     <div key={prop.name} className="space-y-2">
-                      <label className="app-body-sm text-text-secondary">
-                        {prop.name}
-                      </label>
                       {prop.type === "select" && (
-                        <select
-                          className="w-full px-3 py-2 rounded-lg border border-border-medium bg-surface-primary"
-                          value={properties[prop.name]}
-                          onChange={(e) =>
-                            handlePropertyChange(prop.name, e.target.value)
-                          }
-                        >
-                          {prop.options?.map((option) => (
-                            <option key={option} value={option}>
-                              {option}
-                            </option>
-                          ))}
-                        </select>
+                        <>
+                          <label className="app-body-sm text-text-secondary">
+                            {prop.name}
+                          </label>
+                          <select
+                            className="w-full px-3 py-2 rounded-lg border border-border-medium bg-surface-primary"
+                            value={properties[prop.name]}
+                            onChange={(e) =>
+                              handlePropertyChange(prop.name, e.target.value)
+                            }
+                          >
+                            {prop.options?.map((option) => (
+                              <option key={option} value={option}>
+                                {option}
+                              </option>
+                            ))}
+                          </select>
+                        </>
                       )}
                       {prop.type === "boolean" && (
-                        <label className="flex items-center space-x-2">
-                          <input
-                            type="checkbox"
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm text-text-secondary">
+                            {prop.name === "checked" ? "Active" : "Disabled"}
+                          </span>
+                          <Switch
+                            size="sm"
                             checked={properties[prop.name]}
-                            onChange={(e) =>
-                              handlePropertyChange(prop.name, e.target.checked)
+                            onCheckedChange={(checked) =>
+                              handlePropertyChange(prop.name, checked)
                             }
                           />
-                          <span>Enabled</span>
-                        </label>
+                        </div>
                       )}
                     </div>
                   ))}
