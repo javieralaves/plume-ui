@@ -6,6 +6,9 @@ import { Checkbox } from "./components/Checkbox";
 import { RadioGroup, RadioItem } from "./components/RadioGroup";
 import { Tabs, TabList, Tab, TabPanel } from "./components/Tabs";
 import { Alert } from "./components/Alert";
+import { Avatar } from "./components/Avatar";
+import { Badge } from "./components/Badge";
+import { CheckCircle, AlertTriangle, XCircle, Bell } from "lucide-react";
 import { useState } from "react";
 
 export default function Home() {
@@ -824,6 +827,190 @@ export default function Home() {
                   A simple error message with no title.
                 </Alert>
                 <Alert type="info">A simple info message with no title.</Alert>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Avatar Component Demo */}
+        <section>
+          <h2 className="app-h2 mb-8">Avatar Component</h2>
+          <div className="space-y-8">
+            {/* Size Variants */}
+            <div className="space-y-2">
+              <h3 className="app-h3 text-text-secondary">Size Variants</h3>
+              <div className="flex gap-4 items-center">
+                <Avatar
+                  size="sm"
+                  src="/images/avatar-1.jpeg"
+                  alt="Small avatar"
+                />
+                <Avatar
+                  size="md"
+                  src="/images/avatar-1.jpeg"
+                  alt="Medium avatar"
+                />
+                <Avatar
+                  size="lg"
+                  src="/images/avatar-1.jpeg"
+                  alt="Large avatar"
+                />
+              </div>
+            </div>
+
+            {/* Initials Fallback */}
+            <div className="space-y-2">
+              <h3 className="app-h3 text-text-secondary">Initials Fallback</h3>
+              <div className="flex gap-4 items-center">
+                <Avatar size="sm" initials="JD" />
+                <Avatar size="md" initials="AB" />
+                <Avatar size="lg" initials="YZ" />
+              </div>
+            </div>
+
+            {/* Icon Fallback */}
+            <div className="space-y-2">
+              <h3 className="app-h3 text-text-secondary">Icon Fallback</h3>
+              <div className="flex gap-4 items-center">
+                <Avatar size="sm" />
+                <Avatar size="md" />
+                <Avatar size="lg" />
+              </div>
+            </div>
+
+            {/* Image Error Fallback */}
+            <div className="space-y-2">
+              <h3 className="app-h3 text-text-secondary">
+                Image Error Fallback
+              </h3>
+              <div className="flex gap-4 items-center">
+                <Avatar
+                  size="md"
+                  src="/non-existent-image.jpg"
+                  initials="FB"
+                  alt="Fallback example"
+                />
+                <Avatar
+                  size="md"
+                  src="/another-missing-image.jpg"
+                  alt="Fallback to icon"
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Badge Component Demo */}
+        <section>
+          <h2 className="app-h2 mb-8">Badge Component</h2>
+          <div className="space-y-8">
+            {/* Badge Variants */}
+            <div className="space-y-2">
+              <h3 className="app-h3 text-text-secondary">Badge Variants</h3>
+              <div className="flex gap-4 items-center">
+                <Badge>Default</Badge>
+                <Badge variant="primary">Primary</Badge>
+                <Badge variant="success">Success</Badge>
+                <Badge variant="warning">Warning</Badge>
+                <Badge variant="error">Error</Badge>
+              </div>
+            </div>
+
+            {/* Size Variants */}
+            <div className="space-y-2">
+              <h3 className="app-h3 text-text-secondary">Size Variants</h3>
+              <div className="flex gap-4 items-center">
+                <Badge size="sm">Small</Badge>
+                <Badge size="md">Medium</Badge>
+                <Badge size="lg">Large</Badge>
+              </div>
+            </div>
+
+            {/* Badges with Icons */}
+            <div className="space-y-2">
+              <h3 className="app-h3 text-text-secondary">Badges with Icons</h3>
+              <div className="flex gap-4 items-center">
+                <Badge
+                  variant="success"
+                  icon={<CheckCircle className="w-3.5 h-3.5" />}
+                >
+                  Completed
+                </Badge>
+                <Badge
+                  variant="warning"
+                  icon={<AlertTriangle className="w-3.5 h-3.5" />}
+                >
+                  Pending
+                </Badge>
+                <Badge
+                  variant="error"
+                  icon={<XCircle className="w-3.5 h-3.5" />}
+                >
+                  Failed
+                </Badge>
+                <Badge
+                  variant="primary"
+                  icon={<Bell className="w-3.5 h-3.5" />}
+                >
+                  Notifications
+                </Badge>
+              </div>
+            </div>
+
+            {/* Outline Badges */}
+            <div className="space-y-2">
+              <h3 className="app-h3 text-text-secondary">Outline Badges</h3>
+              <div className="flex gap-4 items-center">
+                <Badge outline>Default</Badge>
+                <Badge variant="primary" outline>
+                  Primary
+                </Badge>
+                <Badge variant="success" outline>
+                  Success
+                </Badge>
+                <Badge variant="warning" outline>
+                  Warning
+                </Badge>
+                <Badge variant="error" outline>
+                  Error
+                </Badge>
+              </div>
+            </div>
+
+            {/* Dismissible Badges */}
+            <div className="space-y-2">
+              <h3 className="app-h3 text-text-secondary">Dismissible Badges</h3>
+              <div className="flex gap-4 items-center">
+                <Badge onDismiss={() => {}}>Dismissible</Badge>
+                <Badge variant="primary" onDismiss={() => {}}>
+                  Click X
+                </Badge>
+                <Badge
+                  variant="success"
+                  icon={<CheckCircle className="w-3.5 h-3.5" />}
+                  onDismiss={() => {}}
+                >
+                  With Icon
+                </Badge>
+              </div>
+            </div>
+
+            {/* Status Badges */}
+            <div className="space-y-2">
+              <h3 className="app-h3 text-text-secondary">Status Badges</h3>
+              <div className="flex gap-4 items-center">
+                <Badge variant="success" isStatus>
+                  Active
+                </Badge>
+                <Badge variant="warning" isStatus>
+                  Away
+                </Badge>
+                <Badge variant="error" isStatus>
+                  Offline
+                </Badge>
+                <Badge variant="primary" isStatus>
+                  Busy
+                </Badge>
               </div>
             </div>
           </div>
