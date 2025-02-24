@@ -1,6 +1,4 @@
-import Image from "next/image";
 import { Button } from "@/components/Button";
-import { Plus, Heart, Settings, Menu } from "lucide-react";
 
 export default function Home() {
   return (
@@ -102,6 +100,7 @@ export default function Home() {
                 Interactive Colors
               </h3>
               <div className="grid gap-4">
+                {/* Primary Colors */}
                 <div className="grid grid-cols-[200px_1fr] items-center gap-4">
                   <div className="grid gap-2">
                     <div className="h-12 bg-primary rounded-lg"></div>
@@ -119,19 +118,20 @@ export default function Home() {
                   </div>
                 </div>
 
+                {/* Interactive Background Colors */}
                 <div className="grid grid-cols-[200px_1fr] items-center gap-4">
                   <div className="grid gap-2">
-                    <div className="h-12 bg-secondary rounded-lg"></div>
-                    <span className="app-caption">secondary</span>
+                    <div className="h-12 bg-interactive-primary-bg rounded-lg"></div>
+                    <span className="app-caption">interactive-bg</span>
                   </div>
                   <div className="grid gap-2">
                     <div className="grid grid-cols-2 gap-2">
-                      <div className="h-12 bg-secondary-hover rounded-lg"></div>
-                      <div className="h-12 bg-secondary-light rounded-lg"></div>
+                      <div className="h-12 bg-interactive-primary-bg-hover rounded-lg"></div>
+                      <div className="h-12 bg-interactive-primary-bg-active rounded-lg"></div>
                     </div>
                     <div className="grid grid-cols-2 gap-2">
                       <span className="app-caption">hover</span>
-                      <span className="app-caption">light</span>
+                      <span className="app-caption">active</span>
                     </div>
                   </div>
                 </div>
@@ -227,22 +227,8 @@ export default function Home() {
               </h3>
               <div className="flex flex-wrap gap-4">
                 <Button variant="primary">Primary Button</Button>
-                <Button variant="secondary">Secondary Button</Button>
+                <Button variant="neutral">Neutral Button</Button>
                 <Button variant="ghost">Ghost Button</Button>
-                <div className="flex gap-2">
-                  <Button variant="icon">
-                    <Plus className="w-5 h-5" />
-                  </Button>
-                  <Button variant="icon">
-                    <Heart className="w-5 h-5" />
-                  </Button>
-                  <Button variant="icon">
-                    <Settings className="w-5 h-5" />
-                  </Button>
-                  <Button variant="icon">
-                    <Menu className="w-5 h-5" />
-                  </Button>
-                </div>
               </div>
             </div>
 
@@ -271,14 +257,11 @@ export default function Home() {
                 <Button variant="primary" disabled>
                   Disabled Primary
                 </Button>
-                <Button variant="secondary" disabled>
-                  Disabled Secondary
+                <Button variant="neutral" disabled>
+                  Disabled Neutral
                 </Button>
                 <Button variant="ghost" disabled>
                   Disabled Ghost
-                </Button>
-                <Button variant="icon" disabled>
-                  <Plus className="w-5 h-5" />
                 </Button>
               </div>
             </div>

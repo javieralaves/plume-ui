@@ -8,19 +8,31 @@
   --background: #ffffff;
   --foreground: #171717;
 
+  /* Neutral colors */
+  --neutral-50: #fafafa;
+  --neutral-100: #f5f5f5;
+  --neutral-200: #e5e5e5;
+  --neutral-300: #d4d4d4;
+  --neutral-400: #a3a3a3;
+  --neutral-500: #737373;
+  --neutral-600: #525252;
+  --neutral-700: #404040;
+  --neutral-800: #262626;
+  --neutral-900: #171717;
+
   /* Semantic colors */
-  --surface-primary: #ffffff;
-  --surface-secondary: #f5f5f5;
-  --surface-tertiary: #e5e5e5;
+  --surface-primary: var(--neutral-50);
+  --surface-secondary: var(--neutral-100);
+  --surface-tertiary: var(--neutral-200);
 
   /* Interactive elements */
   --primary: #007aff;
   --primary-hover: #0066cc;
   --primary-light: #e5f1ff;
 
-  --secondary: #5856d6;
-  --secondary-hover: #4644b3;
-  --secondary-light: #eeeeff;
+  --interactive-primary-bg: var(--neutral-100);
+  --interactive-primary-bg-hover: var(--neutral-200);
+  --interactive-primary-bg-active: var(--neutral-300);
 
   /* Status colors */
   --success: #34c759;
@@ -31,15 +43,15 @@
   --error-light: #ffe5e5;
 
   /* Text colors */
-  --text-primary: #171717;
-  --text-secondary: #666666;
-  --text-tertiary: #8e8e8e;
-  --text-disabled: #a3a3a3;
+  --text-primary: var(--neutral-900);
+  --text-secondary: var(--neutral-600);
+  --text-tertiary: var(--neutral-500);
+  --text-disabled: var(--neutral-400);
 
   /* Border colors */
-  --border-light: #e5e5e5;
-  --border-medium: #d4d4d4;
-  --border-heavy: #737373;
+  --border-light: var(--neutral-200);
+  --border-medium: var(--neutral-300);
+  --border-heavy: var(--neutral-500);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -48,19 +60,31 @@
     --background: #0a0a0a;
     --foreground: #ededed;
 
+    /* Neutral colors */
+    --neutral-50: #262626;
+    --neutral-100: #1a1a1a;
+    --neutral-200: #171717;
+    --neutral-300: #141414;
+    --neutral-400: #a3a3a3;
+    --neutral-500: #737373;
+    --neutral-600: #525252;
+    --neutral-700: #404040;
+    --neutral-800: #262626;
+    --neutral-900: #171717;
+
     /* Semantic colors */
-    --surface-primary: #0a0a0a;
-    --surface-secondary: #1a1a1a;
-    --surface-tertiary: #262626;
+    --surface-primary: var(--neutral-50);
+    --surface-secondary: var(--neutral-100);
+    --surface-tertiary: var(--neutral-200);
 
     /* Interactive elements */
     --primary: #0a84ff;
     --primary-hover: #0066cc;
     --primary-light: #1a1f2e;
 
-    --secondary: #5e5ce6;
-    --secondary-hover: #4644b3;
-    --secondary-light: #1a1a2e;
+    --interactive-primary-bg: var(--neutral-100);
+    --interactive-primary-bg-hover: var(--neutral-200);
+    --interactive-primary-bg-active: var(--neutral-300);
 
     /* Status colors */
     --success: #32d74b;
@@ -71,15 +95,15 @@
     --error-light: #2e1a1a;
 
     /* Text colors */
-    --text-primary: #ededed;
-    --text-secondary: #a3a3a3;
-    --text-tertiary: #737373;
-    --text-disabled: #525252;
+    --text-primary: var(--neutral-50);
+    --text-secondary: var(--neutral-400);
+    --text-tertiary: var(--neutral-500);
+    --text-disabled: var(--neutral-600);
 
     /* Border colors */
-    --border-light: #262626;
-    --border-medium: #404040;
-    --border-heavy: #737373;
+    --border-light: var(--neutral-700);
+    --border-medium: var(--neutral-600);
+    --border-heavy: var(--neutral-500);
   }
 }
 

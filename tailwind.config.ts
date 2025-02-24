@@ -13,6 +13,20 @@ export default {
         background: "var(--background)",
         foreground: "var(--foreground)",
 
+        // Neutral scale
+        neutral: {
+          50: "var(--neutral-50)",
+          100: "var(--neutral-100)",
+          200: "var(--neutral-200)",
+          300: "var(--neutral-300)",
+          400: "var(--neutral-400)",
+          500: "var(--neutral-500)",
+          600: "var(--neutral-600)",
+          700: "var(--neutral-700)",
+          800: "var(--neutral-800)",
+          900: "var(--neutral-900)",
+        },
+
         // Surfaces
         surface: {
           primary: "var(--surface-primary)",
@@ -26,10 +40,12 @@ export default {
           hover: "var(--primary-hover)",
           light: "var(--primary-light)",
         },
-        secondary: {
-          DEFAULT: "var(--secondary)",
-          hover: "var(--secondary-hover)",
-          light: "var(--secondary-light)",
+        interactive: {
+          primary: {
+            bg: "var(--interactive-primary-bg)",
+            "bg-hover": "var(--interactive-primary-bg-hover)",
+            "bg-active": "var(--interactive-primary-bg-active)",
+          },
         },
 
         // Status
