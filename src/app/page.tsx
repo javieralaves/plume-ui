@@ -1,16 +1,7 @@
-import { Button } from "@/components/Button";
-import { Playground } from "@/components/Playground";
-
 export default function Home() {
   return (
     <div className="min-h-screen p-8 sm:p-20">
       <main className="max-w-5xl mx-auto space-y-20">
-        {/* Typography Showcase */}
-        <section>
-          <h2 className="app-h2 mb-8">Component Playground</h2>
-          <Playground />
-        </section>
-
         {/* Typography Showcase */}
         <section>
           <h2 className="app-h2 mb-8">Typography</h2>
