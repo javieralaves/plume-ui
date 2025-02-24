@@ -221,59 +221,6 @@ export default function Home() {
             </div>
           </div>
         </section>
-
-        {/* Button Showcase */}
-        <section>
-          <h2 className="app-h2 mb-8">Buttons</h2>
-
-          <div className="grid gap-12">
-            {/* Button Variants */}
-            <div>
-              <h3 className="app-h3 mb-4 text-text-secondary">
-                Button Variants
-              </h3>
-              <div className="flex flex-wrap gap-4">
-                <Button variant="primary">Primary Button</Button>
-                <Button variant="neutral">Neutral Button</Button>
-                <Button variant="ghost">Ghost Button</Button>
-              </div>
-            </div>
-
-            {/* Button Sizes */}
-            <div>
-              <h3 className="app-h3 mb-4 text-text-secondary">Button Sizes</h3>
-              <div className="flex flex-wrap items-center gap-4">
-                <Button variant="primary" size="sm">
-                  Small Button
-                </Button>
-                <Button variant="primary" size="md">
-                  Medium Button
-                </Button>
-                <Button variant="primary" size="lg">
-                  Large Button
-                </Button>
-              </div>
-            </div>
-
-            {/* Disabled State */}
-            <div>
-              <h3 className="app-h3 mb-4 text-text-secondary">
-                Disabled State
-              </h3>
-              <div className="flex flex-wrap gap-4">
-                <Button variant="primary" disabled>
-                  Disabled Primary
-                </Button>
-                <Button variant="neutral" disabled>
-                  Disabled Neutral
-                </Button>
-                <Button variant="ghost" disabled>
-                  Disabled Ghost
-                </Button>
-              </div>
-            </div>
-          </div>
-        </section>
       </main>
     </div>
   );
