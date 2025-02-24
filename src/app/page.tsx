@@ -5,6 +5,7 @@ import { Switch } from "./components/Switch";
 import { Checkbox } from "./components/Checkbox";
 import { RadioGroup, RadioItem } from "./components/RadioGroup";
 import { Tabs, TabList, Tab, TabPanel } from "./components/Tabs";
+import { Alert } from "./components/Alert";
 import { useState } from "react";
 
 export default function Home() {
@@ -38,6 +39,13 @@ export default function Home() {
     demo: "tab1",
   });
 
+  const [showAlerts, setShowAlerts] = useState({
+    success: true,
+    warning: true,
+    error: true,
+    info: true,
+  });
+
   const handleSwitchChange =
     (key: keyof typeof switches) => (checked: boolean) => {
       setSwitches((prev) => ({ ...prev, [key]: checked }));
@@ -63,6 +71,10 @@ export default function Home() {
       child1: newValue,
       child2: newValue,
     }));
+  };
+
+  const dismissAlert = (type: keyof typeof showAlerts) => {
+    setShowAlerts((prev) => ({ ...prev, [type]: false }));
   };
 
   return (
@@ -718,6 +730,101 @@ export default function Home() {
                   <p>Content for Enabled Tab</p>
                 </TabPanel>
               </Tabs>
+            </div>
+          </div>
+        </section>
+
+        {/* Alert Component Demo */}
+        <section>
+          <h2 className="app-h2 mb-8">Alert Component</h2>
+          <div className="space-y-8">
+            {/* Alert Types */}
+            <div className="space-y-2">
+              <h3 className="app-h3 text-text-secondary">Alert Types</h3>
+              <div className="space-y-4">
+                {showAlerts.success && (
+                  <Alert
+                    type="success"
+                    title="Success Alert"
+                    onDismiss={() => dismissAlert("success")}
+                  >
+                    Your changes have been successfully saved.
+                  </Alert>
+                )}
+
+                {showAlerts.warning && (
+                  <Alert
+                    type="warning"
+                    title="Warning Alert"
+                    onDismiss={() => dismissAlert("warning")}
+                  >
+                    Your session will expire in 5 minutes. Please save your
+                    work.
+                  </Alert>
+                )}
+
+                {showAlerts.error && (
+                  <Alert
+                    type="error"
+                    title="Error Alert"
+                    onDismiss={() => dismissAlert("error")}
+                  >
+                    There was an error processing your request. Please try
+                    again.
+                  </Alert>
+                )}
+
+                {showAlerts.info && (
+                  <Alert
+                    type="info"
+                    title="Info Alert"
+                    onDismiss={() => dismissAlert("info")}
+                  >
+                    A new version of the application is available.
+                  </Alert>
+                )}
+              </div>
+            </div>
+
+            {/* Non-dismissible Alerts */}
+            <div className="space-y-2">
+              <h3 className="app-h3 text-text-secondary">
+                Non-dismissible Alerts
+              </h3>
+              <div className="space-y-4">
+                <Alert type="success">
+                  This is a non-dismissible success alert.
+                </Alert>
+
+                <Alert type="warning">
+                  This is a non-dismissible warning alert.
+                </Alert>
+
+                <Alert type="error">
+                  This is a non-dismissible error alert.
+                </Alert>
+
+                <Alert type="info">This is a non-dismissible info alert.</Alert>
+              </div>
+            </div>
+
+            {/* Alerts without titles */}
+            <div className="space-y-2">
+              <h3 className="app-h3 text-text-secondary">
+                Alerts without titles
+              </h3>
+              <div className="space-y-4">
+                <Alert type="success">
+                  A simple success message with no title.
+                </Alert>
+                <Alert type="warning">
+                  A simple warning message with no title.
+                </Alert>
+                <Alert type="error">
+                  A simple error message with no title.
+                </Alert>
+                <Alert type="info">A simple info message with no title.</Alert>
+              </div>
             </div>
           </div>
         </section>
