@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import { Button } from "./Button";
+import { Switch } from "./Switch";
 
-type ComponentType = "button";
+type ComponentType = "button" | "switch";
 
 interface PlaygroundProps {
   className?: string;
@@ -15,12 +16,13 @@ const COMPONENTS: Record<
   {
     name: string;
     component: React.ComponentType<any>;
-    variants: string[];
+    variants?: string[];
     properties: {
       name: string;
       type: "select" | "boolean";
       options?: string[];
     }[];
+    defaultProps?: Record<string, any>;
   }
 > = {
   button: {
@@ -38,6 +40,34 @@ const COMPONENTS: Record<
         type: "boolean",
       },
     ],
+    defaultProps: {
+      size: "md",
+      disabled: false,
+    },
+  },
+  switch: {
+    name: "Switch",
+    component: Switch,
+    properties: [
+      {
+        name: "size",
+        type: "select",
+        options: ["sm", "md", "lg"],
+      },
+      {
+        name: "checked",
+        type: "boolean",
+      },
+      {
+        name: "disabled",
+        type: "boolean",
+      },
+    ],
+    defaultProps: {
+      size: "md",
+      checked: false,
+      disabled: false,
+    },
   },
 };
 
@@ -45,16 +75,58 @@ export function Playground({ className }: PlaygroundProps) {
   const [selectedComponent, setSelectedComponent] =
     useState<ComponentType>("button");
   const [variant, setVariant] = useState(
-    COMPONENTS[selectedComponent].variants[0]
+    COMPONENTS[selectedComponent].variants?.[0] || ""
   );
-  const [properties, setProperties] = useState<Record<string, any>>({
-    size: "md",
-    disabled: false,
+  const [properties, setProperties] = useState<Record<string, any>>(() => {
+    // Initialize properties with handlers for interactive components
+    const initialProps = COMPONENTS[selectedComponent].defaultProps || {};
+    if (selectedComponent === "switch") {
+      return {
+        ...initialProps,
+        onCheckedChange: (checked: boolean) => {
+          setProperties((p) => ({ ...p, checked }));
+        },
+      };
+    }
+    return initialProps;
   });
   const [isDarkMode, setIsDarkMode] = useState(false);
 
   const Component = COMPONENTS[selectedComponent].component;
   const componentConfig = COMPONENTS[selectedComponent];
+
+  // Handle component change
+  const handleComponentChange = (newComponent: ComponentType) => {
+    setSelectedComponent(newComponent);
+    setVariant(COMPONENTS[newComponent].variants?.[0] || "");
+    // Initialize properties with handlers for the new component
+    const newProps = COMPONENTS[newComponent].defaultProps || {};
+    if (newComponent === "switch") {
+      setProperties({
+        ...newProps,
+        onCheckedChange: (checked: boolean) => {
+          setProperties((p) => ({ ...p, checked }));
+        },
+      });
+    } else {
+      setProperties(newProps);
+    }
+  };
+
+  // Special handler for switch checked state
+  const handlePropertyChange = (name: string, value: any) => {
+    setProperties((prev) => {
+      const newProps = { ...prev, [name]: value };
+      // Preserve the onCheckedChange handler for switch
+      if (selectedComponent === "switch" && name === "checked") {
+        return {
+          ...newProps,
+          onCheckedChange: prev.onCheckedChange,
+        };
+      }
+      return newProps;
+    });
+  };
 
   return (
     <div className={className}>
@@ -67,7 +139,7 @@ export function Playground({ className }: PlaygroundProps) {
               className="w-full px-3 py-2 rounded-lg border border-border-medium bg-surface-primary"
               value={selectedComponent}
               onChange={(e) =>
-                setSelectedComponent(e.target.value as ComponentType)
+                handleComponentChange(e.target.value as ComponentType)
               }
             >
               {Object.entries(COMPONENTS).map(([key, config]) => (
@@ -78,66 +150,65 @@ export function Playground({ className }: PlaygroundProps) {
             </select>
           </div>
 
-          <div className="space-y-4">
-            <h3 className="app-h4">Variant</h3>
-            <select
-              className="w-full px-3 py-2 rounded-lg border border-border-medium bg-surface-primary"
-              value={variant}
-              onChange={(e) => setVariant(e.target.value)}
-            >
-              {componentConfig.variants.map((v) => (
-                <option key={v} value={v}>
-                  {v}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className="space-y-4">
-            <h3 className="app-h4">Properties</h3>
+          {componentConfig.variants && componentConfig.variants.length > 0 && (
             <div className="space-y-4">
-              {componentConfig.properties.map((prop) => (
-                <div key={prop.name} className="space-y-2">
-                  <label className="app-body-sm text-text-secondary">
-                    {prop.name}
-                  </label>
-                  {prop.type === "select" && (
-                    <select
-                      className="w-full px-3 py-2 rounded-lg border border-border-medium bg-surface-primary"
-                      value={properties[prop.name]}
-                      onChange={(e) =>
-                        setProperties((prev) => ({
-                          ...prev,
-                          [prop.name]: e.target.value,
-                        }))
-                      }
-                    >
-                      {prop.options?.map((option) => (
-                        <option key={option} value={option}>
-                          {option}
-                        </option>
-                      ))}
-                    </select>
-                  )}
-                  {prop.type === "boolean" && (
-                    <label className="flex items-center space-x-2">
-                      <input
-                        type="checkbox"
-                        checked={properties[prop.name]}
-                        onChange={(e) =>
-                          setProperties((prev) => ({
-                            ...prev,
-                            [prop.name]: e.target.checked,
-                          }))
-                        }
-                      />
-                      <span>Enabled</span>
-                    </label>
-                  )}
-                </div>
-              ))}
+              <h3 className="app-h4">Variant</h3>
+              <select
+                className="w-full px-3 py-2 rounded-lg border border-border-medium bg-surface-primary"
+                value={variant}
+                onChange={(e) => setVariant(e.target.value)}
+              >
+                {componentConfig.variants.map((v) => (
+                  <option key={v} value={v}>
+                    {v}
+                  </option>
+                ))}
+              </select>
             </div>
-          </div>
+          )}
+
+          {componentConfig.properties &&
+            componentConfig.properties.length > 0 && (
+              <div className="space-y-4">
+                <h3 className="app-h4">Properties</h3>
+                <div className="space-y-4">
+                  {componentConfig.properties.map((prop) => (
+                    <div key={prop.name} className="space-y-2">
+                      <label className="app-body-sm text-text-secondary">
+                        {prop.name}
+                      </label>
+                      {prop.type === "select" && (
+                        <select
+                          className="w-full px-3 py-2 rounded-lg border border-border-medium bg-surface-primary"
+                          value={properties[prop.name]}
+                          onChange={(e) =>
+                            handlePropertyChange(prop.name, e.target.value)
+                          }
+                        >
+                          {prop.options?.map((option) => (
+                            <option key={option} value={option}>
+                              {option}
+                            </option>
+                          ))}
+                        </select>
+                      )}
+                      {prop.type === "boolean" && (
+                        <label className="flex items-center space-x-2">
+                          <input
+                            type="checkbox"
+                            checked={properties[prop.name]}
+                            onChange={(e) =>
+                              handlePropertyChange(prop.name, e.target.checked)
+                            }
+                          />
+                          <span>Enabled</span>
+                        </label>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
           <div className="space-y-4">
             <h3 className="app-h4">Theme</h3>
@@ -157,7 +228,7 @@ export function Playground({ className }: PlaygroundProps) {
           } flex items-center justify-center p-8`}
         >
           <Component variant={variant} {...properties}>
-            {componentConfig.name}
+            {selectedComponent === "button" && componentConfig.name}
           </Component>
         </div>
       </div>
