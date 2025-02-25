@@ -248,8 +248,25 @@ export default function StakingDashboard() {
       const avgApr =
         validators.reduce((sum, val) => sum + val.apr, 0) / validators.length;
 
+      // Calculate monthly growth based on recent rewards
+      const now = new Date();
+      const oneMonthAgo = new Date(now.setMonth(now.getMonth() - 1));
+
+      const recentRewards = rewardsHistory.filter(
+        (reward) =>
+          new Date(reward.date) > oneMonthAgo && reward.type === "Daily Reward"
+      );
+
+      const monthlyTotal = recentRewards.reduce(
+        (sum, reward) => sum + reward.amount,
+        0
+      );
+
+      const growth = monthlyTotal > 0 ? (monthlyTotal / total) * 100 : 0;
+
       setTotalEarned(total);
       setAverageApr(avgApr);
+      setMonthlyGrowth(parseFloat(growth.toFixed(1)));
     };
 
     calculateStats();
