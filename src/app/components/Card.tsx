@@ -1,10 +1,14 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { ReactNode } from "react";
+import { ReactNode, useState, useEffect } from "react";
 import Image from "next/image";
+import { ChevronDown, ChevronUp, ArrowRight } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import React from "react";
 
 type CardVariant = "default" | "info" | "statistic" | "interactive" | "form";
+type CardStatLayout = "stacked" | "inline";
 
 /**
  * A versatile card component that provides a container for content with optional header and footer sections.
@@ -49,6 +53,12 @@ interface CardProps {
   compact?: boolean;
   /** Card image */
   image?: string;
+  /** Whether the card should be expandable */
+  expandable?: boolean;
+  /** Whether the card should be default expanded */
+  defaultExpanded?: boolean;
+  /** Right icon */
+  rightIcon?: "arrow" | "chevron";
 }
 
 /**
@@ -61,6 +71,8 @@ interface CardHeaderProps {
   className?: string;
   /** Card icon */
   icon?: ReactNode;
+  /** Card actions */
+  actions?: ReactNode;
 }
 
 /**
@@ -81,6 +93,8 @@ interface CardFooterProps {
   children: ReactNode;
   /** Additional CSS classes */
   className?: string;
+  /** Footer actions */
+  actions?: ReactNode;
 }
 
 interface CardStatProps {
@@ -91,7 +105,11 @@ interface CardStatProps {
     direction: "up" | "down";
   };
   className?: string;
+  layout?: CardStatLayout;
 }
+
+// Local storage key for expanded state
+const EXPANDED_STATE_KEY = "card-expanded-states";
 
 export function Card({
   children,
@@ -101,8 +119,95 @@ export function Card({
   compact = false,
   image,
   interactive = false,
+  expandable = false,
+  defaultExpanded = false,
+  rightIcon,
 }: CardProps) {
+  const [isExpanded, setIsExpanded] = useState(defaultExpanded);
   const isClickable = variant === "interactive" || onClick || interactive;
+
+  // Load expanded state from localStorage on mount
+  useEffect(() => {
+    if (expandable) {
+      const savedStates = JSON.parse(
+        localStorage.getItem(EXPANDED_STATE_KEY) || "{}"
+      );
+      setIsExpanded(savedStates[className || "default"] ?? defaultExpanded);
+    }
+  }, [expandable, className, defaultExpanded]);
+
+  // Save expanded state to localStorage
+  useEffect(() => {
+    if (expandable) {
+      const savedStates = JSON.parse(
+        localStorage.getItem(EXPANDED_STATE_KEY) || "{}"
+      );
+      savedStates[className || "default"] = isExpanded;
+      localStorage.setItem(EXPANDED_STATE_KEY, JSON.stringify(savedStates));
+    }
+  }, [isExpanded, expandable, className]);
+
+  const handleClick = () => {
+    if (expandable) {
+      setIsExpanded(!isExpanded);
+    }
+    onClick?.();
+  };
+
+  const rightIconElement =
+    rightIcon === "arrow" ? (
+      <ArrowRight className="w-4 h-4" />
+    ) : rightIcon === "chevron" ? (
+      <ChevronDown className="w-4 h-4" />
+    ) : null;
+
+  const renderContent = () => {
+    if (!expandable) {
+      return (
+        <div className="flex items-start justify-between gap-4">
+          <div className="flex-1">{children}</div>
+          {rightIconElement && (
+            <span className="text-text-secondary flex-shrink-0">
+              {rightIconElement}
+            </span>
+          )}
+        </div>
+      );
+    }
+
+    // Split children into header and expandable content
+    const childrenArray = React.Children.toArray(children);
+    const header = childrenArray[0]; // Assume first child is header
+    const expandableContent = childrenArray.slice(1); // Rest is expandable
+
+    return (
+      <>
+        <div className="flex items-center justify-between">
+          <div className="flex-1">{header}</div>
+          <span className="text-text-secondary flex-shrink-0">
+            {isExpanded ? (
+              <ChevronUp className="w-4 h-4" />
+            ) : (
+              <ChevronDown className="w-4 h-4" />
+            )}
+          </span>
+        </div>
+        <AnimatePresence initial={false}>
+          {isExpanded && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="overflow-hidden"
+            >
+              <div className="pt-4">{expandableContent}</div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </>
+    );
+  };
 
   return (
     <div
@@ -116,13 +221,16 @@ export function Card({
 
         // Variant-specific styles
         (variant === "interactive" || interactive) &&
-          "cursor-pointer hover:bg-neutral-50",
+          "cursor-pointer hover:bg-neutral-50 hover:border-primary",
         variant === "form" && "shadow-sm space-y-4 form",
         isClickable && "hover:shadow-md",
 
+        // Expandable styles
+        expandable && "cursor-pointer",
+
         className
       )}
-      onClick={onClick}
+      onClick={handleClick}
       role={isClickable ? "button" : undefined}
       tabIndex={isClickable ? 0 : undefined}
     >
@@ -142,24 +250,32 @@ export function Card({
           />
         </div>
       )}
-      {children}
+      {renderContent()}
     </div>
   );
 }
 
-export function CardHeader({ children, className, icon }: CardHeaderProps) {
+export function CardHeader({
+  children,
+  className,
+  icon,
+  actions,
+}: CardHeaderProps) {
   return (
     <div
       className={cn(
-        "flex flex-col gap-1",
+        "flex items-center justify-between gap-4",
         "[&:not(:last-child)]:mb-2",
         // Increase spacing for form variant
         "[.form_&]:mb-4",
         className
       )}
     >
-      {icon && <span className="text-text-secondary">{icon}</span>}
-      {children}
+      <div className="flex items-center gap-2">
+        {icon && <span className="text-text-secondary">{icon}</span>}
+        <div className="flex flex-col gap-1">{children}</div>
+      </div>
+      {actions && <div className="flex items-center gap-2">{actions}</div>}
     </div>
   );
 }
@@ -179,24 +295,35 @@ export function CardBody({ children, className }: CardBodyProps) {
   );
 }
 
-export function CardFooter({ children, className }: CardFooterProps) {
+export function CardFooter({ children, className, actions }: CardFooterProps) {
   return (
     <div
       className={cn(
         "mt-4",
-        "flex items-center gap-3",
-        "justify-end",
+        "flex items-center justify-between gap-3",
         className
       )}
     >
-      {children}
+      <div>{children}</div>
+      {actions && <div className="flex items-center gap-2">{actions}</div>}
     </div>
   );
 }
 
-export function CardStat({ value, label, trend, className }: CardStatProps) {
+export function CardStat({
+  value,
+  label,
+  trend,
+  className,
+  layout = "stacked",
+}: CardStatProps) {
   return (
-    <div className={cn("space-y-1", className)}>
+    <div
+      className={cn(
+        layout === "inline" ? "flex items-center gap-4" : "space-y-1",
+        className
+      )}
+    >
       <div className="flex items-baseline gap-2">
         <span className="text-app-h2 font-semibold text-text-primary">
           {value}
@@ -212,7 +339,14 @@ export function CardStat({ value, label, trend, className }: CardStatProps) {
           </span>
         )}
       </div>
-      <p className="text-app-body-sm text-text-secondary">{label}</p>
+      <p
+        className={cn(
+          "text-app-body-sm text-text-secondary",
+          layout === "inline" && "flex-1"
+        )}
+      >
+        {label}
+      </p>
     </div>
   );
 }

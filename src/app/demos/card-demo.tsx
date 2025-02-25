@@ -7,178 +7,178 @@ import {
   CardFooter,
   CardStat,
 } from "../components/Card";
-import { BarChart3, ArrowRight } from "lucide-react";
 import { Button } from "../components/Button";
-import { Input } from "../components/Input";
-import { Textarea } from "../components/Textarea";
+import { Badge } from "../components/Badge";
+import {
+  Wallet,
+  ArrowUpRight,
+  Settings,
+  ChevronRight,
+  MoreVertical,
+  RefreshCw,
+} from "lucide-react";
 
 export function CardDemo() {
-  const handleClick = () => {
-    console.log("Card clicked");
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("Form submitted");
-  };
-
   return (
     <section className="space-y-8">
       <div className="space-y-4">
         <h2 className="text-2xl font-semibold">Card</h2>
         <p className="text-gray-500 dark:text-gray-400">
-          A versatile container for displaying content and actions.
+          A versatile container component for content organization.
         </p>
       </div>
 
+      {/* Basic Cards */}
       <div className="space-y-4">
         <h3 className="text-lg font-medium">Basic Usage</h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Card>
             <CardHeader>
-              <div className="text-lg font-semibold">Card Title</div>
-              <p className="text-text-secondary">Card subtitle</p>
+              <h3 className="text-lg font-medium">Simple Card</h3>
+              <p className="text-sm text-text-secondary">Basic card example</p>
             </CardHeader>
             <CardBody>
-              <p>
-                This is the main content of the card. You can put any content
-                here, including text, images, or other components.
+              <p>This is a basic card with header and body content.</p>
+            </CardBody>
+          </Card>
+
+          <Card variant="interactive" onClick={() => console.log("clicked")}>
+            <CardHeader>
+              <h3 className="text-lg font-medium">Interactive Card</h3>
+              <p className="text-sm text-text-secondary">Click me!</p>
+            </CardHeader>
+            <CardBody>
+              <p>This card is clickable and shows a hover state.</p>
+            </CardBody>
+          </Card>
+        </div>
+      </div>
+
+      {/* Expandable Cards */}
+      <div className="space-y-4">
+        <h3 className="text-lg font-medium">Expandable Cards</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <Card expandable defaultExpanded>
+            <CardHeader>
+              <h3 className="text-lg font-medium">Staking Details</h3>
+              <p className="text-sm text-text-secondary">
+                Click to expand/collapse
+              </p>
+            </CardHeader>
+            <CardBody>
+              <CardStat
+                value="1,234.56 ETH"
+                label="Total Staked"
+                trend={{ value: 5.2, direction: "up" }}
+              />
+              <p className="mt-4">
+                Additional details about your staking position that are revealed
+                when expanded.
               </p>
             </CardBody>
+          </Card>
+
+          <Card expandable>
+            <CardHeader>
+              <h3 className="text-lg font-medium">Rewards History</h3>
+              <p className="text-sm text-text-secondary">View your earnings</p>
+            </CardHeader>
+            <CardBody>
+              <CardStat
+                value="45.67 ETH"
+                label="Total Rewards"
+                trend={{ value: 2.8, direction: "up" }}
+              />
+              <p className="mt-4">
+                Detailed breakdown of your staking rewards and history.
+              </p>
+            </CardBody>
+          </Card>
+        </div>
+      </div>
+
+      {/* Cards with Actions */}
+      <div className="space-y-4">
+        <h3 className="text-lg font-medium">Cards with Actions</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <Card>
+            <CardHeader
+              icon={<Wallet className="w-5 h-5" />}
+              actions={
+                <Button size="sm" variant="secondary">
+                  Claim Rewards
+                </Button>
+              }
+            >
+              <h3 className="text-lg font-medium">Validator Status</h3>
+              <p className="text-sm text-text-secondary">Active</p>
+            </CardHeader>
+            <CardBody>
+              <CardStat value="32.00 ETH" label="Staked Amount" />
+              <CardStat
+                className="mt-4"
+                value="99.98%"
+                label="Uptime"
+                trend={{ value: 0.02, direction: "up" }}
+              />
+            </CardBody>
             <CardFooter>
-              <Button variant="secondary" onClick={handleClick}>
-                Learn More
-              </Button>
+              <Badge variant="success">Earning Rewards</Badge>
             </CardFooter>
           </Card>
 
-          <Card>
+          <Card rightIcon="arrow" interactive>
+            <CardHeader icon={<Settings className="w-5 h-5" />}>
+              <h3 className="text-lg font-medium">Validator Settings</h3>
+              <p className="text-sm text-text-secondary">
+                Configure preferences
+              </p>
+            </CardHeader>
             <CardBody>
-              <p>A simple card with only body content.</p>
+              <p>Manage your validator settings and preferences.</p>
             </CardBody>
           </Card>
         </div>
       </div>
 
+      {/* Individual Stats Cards */}
       <div className="space-y-4">
-        <h3 className="text-lg font-medium">With Stats</h3>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <h3 className="text-lg font-medium">Stats Cards</h3>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
           <Card>
             <CardBody>
-              <div className="flex items-center gap-2">
-                <BarChart3 className="w-4 h-4 text-text-secondary" />
-                <CardStat
-                  label="Total Sales"
-                  value="$12,345"
-                  trend={{ value: 12, direction: "up" }}
-                />
-              </div>
-            </CardBody>
-          </Card>
-
-          <Card>
-            <CardBody>
-              <div className="flex items-center gap-2">
-                <BarChart3 className="w-4 h-4 text-text-secondary" />
-                <CardStat
-                  label="Revenue"
-                  value="$8,674"
-                  trend={{ value: 5, direction: "down" }}
-                />
-              </div>
+              <CardStat
+                value="128"
+                label="Active Validators"
+                trend={{ value: 3, direction: "up" }}
+              />
             </CardBody>
           </Card>
 
           <Card>
             <CardBody>
-              <div className="flex items-center gap-2">
-                <BarChart3 className="w-4 h-4 text-text-secondary" />
-                <CardStat
-                  label="Profit"
-                  value="$3,671"
-                  trend={{ value: 8, direction: "up" }}
-                />
-              </div>
-            </CardBody>
-          </Card>
-        </div>
-      </div>
-
-      <div className="space-y-4">
-        <h3 className="text-lg font-medium">Interactive Cards</h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <Card
-            className="cursor-pointer hover:border-primary transition-colors"
-            onClick={handleClick}
-          >
-            <CardBody className="flex items-center justify-between">
-              <div>
-                <div className="font-semibold">View Analytics</div>
-                <p className="text-text-secondary">Check your performance</p>
-              </div>
-              <ArrowRight className="w-5 h-5 text-text-secondary" />
+              <CardStat
+                value="4,096 ETH"
+                label="Total Staked"
+                trend={{ value: 1.2, direction: "up" }}
+              />
             </CardBody>
           </Card>
 
-          <Card
-            className="cursor-pointer hover:border-primary transition-colors"
-            onClick={handleClick}
-          >
-            <CardBody className="flex items-center justify-between">
-              <div>
-                <div className="font-semibold">Account Settings</div>
-                <p className="text-text-secondary">Manage your preferences</p>
-              </div>
-              <ArrowRight className="w-5 h-5 text-text-secondary" />
+          <Card>
+            <CardBody>
+              <CardStat value="99.9%" label="Network Uptime" />
             </CardBody>
           </Card>
-        </div>
-      </div>
 
-      <div className="space-y-4">
-        <h3 className="text-lg font-medium">Form Card</h3>
-        <div className="max-w-md">
-          <Card variant="form">
-            <form onSubmit={handleSubmit}>
-              <CardHeader>
-                <h4 className="text-lg font-semibold text-text-primary">
-                  Contact Form
-                </h4>
-                <p className="text-text-secondary">
-                  Fill in your details below
-                </p>
-              </CardHeader>
-              <CardBody>
-                <div>
-                  <Input
-                    label="Full Name"
-                    placeholder="Enter your full name"
-                    required
-                  />
-                </div>
-                <div>
-                  <Input
-                    type="email"
-                    label="Email"
-                    placeholder="Enter your email"
-                    required
-                  />
-                </div>
-                <div>
-                  <Textarea
-                    label="Message"
-                    placeholder="Enter your message"
-                    required
-                  />
-                </div>
-              </CardBody>
-              <CardFooter>
-                <Button variant="secondary" type="button">
-                  Cancel
-                </Button>
-                <Button type="submit">Submit</Button>
-              </CardFooter>
-            </form>
+          <Card>
+            <CardBody>
+              <CardStat
+                value="45.67 ETH"
+                label="Rewards Earned"
+                trend={{ value: 5.4, direction: "up" }}
+              />
+            </CardBody>
           </Card>
         </div>
       </div>
