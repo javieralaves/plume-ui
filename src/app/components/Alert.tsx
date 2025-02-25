@@ -4,7 +4,7 @@ import { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { X, CheckCircle, AlertTriangle, XCircle, Info } from "lucide-react";
 
-type AlertType = "success" | "warning" | "error" | "info";
+type AlertType = "base" | "success" | "warning" | "error" | "info";
 
 interface AlertProps {
   type?: AlertType;
@@ -22,19 +22,24 @@ const alertStyles: Record<
     icon: ReactNode;
   }
 > = {
+  base: {
+    container: "bg-white dark:bg-neutral-900",
+    border: "border-border-light",
+    icon: <Info className="w-5 h-5 text-text-secondary" />,
+  },
   success: {
     container: "bg-success-light",
-    border: "border-success",
+    border: "border-success/20",
     icon: <CheckCircle className="w-5 h-5 text-success" />,
   },
   warning: {
     container: "bg-warning-light",
-    border: "border-warning",
+    border: "border-warning/20",
     icon: <AlertTriangle className="w-5 h-5 text-warning" />,
   },
   error: {
     container: "bg-error-light",
-    border: "border-error",
+    border: "border-error/20",
     icon: <XCircle className="w-5 h-5 text-error" />,
   },
   info: {
@@ -45,7 +50,7 @@ const alertStyles: Record<
 };
 
 export function Alert({
-  type = "info",
+  type = "base",
   title,
   children,
   onDismiss,
@@ -55,7 +60,7 @@ export function Alert({
     <div
       role="alert"
       className={cn(
-        "flex gap-3 p-4 rounded-md border-l-4 transition-opacity",
+        "flex gap-2.5 px-3.5 py-2.5 rounded-lg border transition-opacity leading-snug",
         alertStyles[type].container,
         alertStyles[type].border,
         className
@@ -63,9 +68,9 @@ export function Alert({
     >
       <div className="flex-shrink-0 mt-0.5">{alertStyles[type].icon}</div>
 
-      <div className="flex-grow">
+      <div className="flex-grow min-w-0">
         {title && (
-          <div className="font-medium text-text-primary mb-1">{title}</div>
+          <div className="font-medium text-text-primary mb-0.5">{title}</div>
         )}
         <div className="text-text-primary">{children}</div>
       </div>
@@ -75,8 +80,8 @@ export function Alert({
           type="button"
           onClick={onDismiss}
           className={cn(
-            "flex-shrink-0 -mt-1 -mr-1 p-1 rounded-md",
-            "text-text-secondary",
+            "flex-shrink-0 -mt-0.5 -mr-0.5 p-0.5 rounded-md",
+            "text-text-secondary hover:text-text-primary",
             "transition-colors focus:outline-none"
           )}
           aria-label="Dismiss alert"

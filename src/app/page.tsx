@@ -84,6 +84,7 @@ export default function Home() {
     warning: true,
     error: true,
     info: true,
+    base: true,
   });
 
   const [inputValues, setInputValues] = useState({
@@ -1004,7 +1005,15 @@ export default function Home() {
               {/* Alert Types */}
               <div className="space-y-2">
                 <h3 className="app-h3 text-text-secondary">Alert Types</h3>
-                <div className="space-y-4">
+                <div className="space-y-2.5">
+                  <Alert
+                    type="base"
+                    title="Base Alert"
+                    onDismiss={() => dismissAlert("base")}
+                  >
+                    This is a neutral alert that blends well with the interface.
+                  </Alert>
+
                   {showAlerts.success && (
                     <Alert
                       type="success"
@@ -1054,7 +1063,11 @@ export default function Home() {
                 <h3 className="app-h3 text-text-secondary">
                   Non-dismissible Alerts
                 </h3>
-                <div className="space-y-4">
+                <div className="space-y-2.5">
+                  <Alert type="base">
+                    This is a non-dismissible base alert.
+                  </Alert>
+
                   <Alert type="success">
                     This is a non-dismissible success alert.
                   </Alert>
@@ -1078,7 +1091,10 @@ export default function Home() {
                 <h3 className="app-h3 text-text-secondary">
                   Alerts without titles
                 </h3>
-                <div className="space-y-4">
+                <div className="space-y-2.5">
+                  <Alert type="base">
+                    A simple base message with no title.
+                  </Alert>
                   <Alert type="success">
                     A simple success message with no title.
                   </Alert>
