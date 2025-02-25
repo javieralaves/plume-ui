@@ -9,9 +9,25 @@ import { Alert } from "./components/Alert";
 import { Avatar } from "./components/Avatar";
 import { Badge } from "./components/Badge";
 import { Input } from "./components/Input";
-import { CheckCircle, AlertTriangle, XCircle, Bell } from "lucide-react";
+import {
+  CheckCircle,
+  AlertTriangle,
+  XCircle,
+  Bell,
+  Settings,
+  User,
+  LogOut,
+  Mail,
+} from "lucide-react";
 import { useState } from "react";
 import { Textarea } from "./components/Textarea";
+import {
+  DropdownMenu,
+  DropdownTrigger,
+  DropdownContent,
+  DropdownItem,
+  DropdownDivider,
+} from "./components/DropdownMenu";
 
 export default function Home() {
   const [switches, setSwitches] = useState({
@@ -107,6 +123,10 @@ export default function Home() {
     (e: React.ChangeEvent<HTMLTextAreaElement>) => {
       setTextareaValues((prev) => ({ ...prev, [key]: e.target.value }));
     };
+
+  const handleDropdownAction = (action: string) => {
+    console.log(`Dropdown action: ${action}`);
+  };
 
   return (
     <div className="min-h-screen p-8 sm:p-20">
@@ -1211,6 +1231,109 @@ export default function Home() {
                   value={textareaValues.disabled}
                   onChange={handleTextareaChange("disabled")}
                 />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Dropdown Menu Component Demo */}
+        <section>
+          <h2 className="app-h2 mb-8">Dropdown Menu Component</h2>
+          <div className="space-y-8">
+            {/* Basic Dropdown */}
+            <div className="space-y-2">
+              <h3 className="app-h3 text-text-secondary">Basic Dropdown</h3>
+              <div className="flex gap-4">
+                <DropdownMenu>
+                  <DropdownTrigger>Select Option</DropdownTrigger>
+                  <DropdownContent>
+                    <DropdownItem
+                      onClick={() => handleDropdownAction("option1")}
+                    >
+                      Option 1
+                    </DropdownItem>
+                    <DropdownItem
+                      onClick={() => handleDropdownAction("option2")}
+                    >
+                      Option 2
+                    </DropdownItem>
+                    <DropdownItem
+                      onClick={() => handleDropdownAction("option3")}
+                    >
+                      Option 3
+                    </DropdownItem>
+                  </DropdownContent>
+                </DropdownMenu>
+              </div>
+            </div>
+
+            {/* Dropdown with Icons */}
+            <div className="space-y-2">
+              <h3 className="app-h3 text-text-secondary">
+                Dropdown with Icons
+              </h3>
+              <div className="flex gap-4">
+                <DropdownMenu>
+                  <DropdownTrigger>
+                    <User className="w-4 h-4" />
+                    Account
+                  </DropdownTrigger>
+                  <DropdownContent>
+                    <DropdownItem
+                      icon={<Settings className="w-4 h-4" />}
+                      onClick={() => handleDropdownAction("settings")}
+                    >
+                      Settings
+                    </DropdownItem>
+                    <DropdownItem
+                      icon={<Bell className="w-4 h-4" />}
+                      onClick={() => handleDropdownAction("notifications")}
+                    >
+                      Notifications
+                    </DropdownItem>
+                    <DropdownItem
+                      icon={<Mail className="w-4 h-4" />}
+                      onClick={() => handleDropdownAction("messages")}
+                    >
+                      Messages
+                    </DropdownItem>
+                    <DropdownDivider />
+                    <DropdownItem
+                      icon={<LogOut className="w-4 h-4" />}
+                      onClick={() => handleDropdownAction("logout")}
+                    >
+                      Log Out
+                    </DropdownItem>
+                  </DropdownContent>
+                </DropdownMenu>
+              </div>
+            </div>
+
+            {/* Dropdown with Sections */}
+            <div className="space-y-2">
+              <h3 className="app-h3 text-text-secondary">
+                Dropdown with Sections
+              </h3>
+              <div className="flex gap-4">
+                <DropdownMenu>
+                  <DropdownTrigger>Status Updates</DropdownTrigger>
+                  <DropdownContent>
+                    <DropdownItem
+                      icon={<CheckCircle className="w-4 h-4 text-success" />}
+                      onClick={() => handleDropdownAction("completed")}
+                    >
+                      Completed
+                    </DropdownItem>
+                    <DropdownItem
+                      icon={<AlertTriangle className="w-4 h-4 text-warning" />}
+                      onClick={() => handleDropdownAction("pending")}
+                    >
+                      Pending
+                    </DropdownItem>
+                    <DropdownDivider />
+                    <DropdownItem disabled>More Actions</DropdownItem>
+                  </DropdownContent>
+                </DropdownMenu>
               </div>
             </div>
           </div>
