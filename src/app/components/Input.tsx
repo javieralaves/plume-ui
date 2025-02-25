@@ -3,13 +3,24 @@
 import { cn } from "@/lib/utils";
 import { InputHTMLAttributes } from "react";
 
+/**
+ * Available sizes for the Input component.
+ */
 type InputSize = "sm" | "md" | "lg";
 
+/**
+ * A form input component that supports different sizes, labels, and error states.
+ * Extends the native input element with additional styling and functionality.
+ */
 interface InputProps
   extends Omit<InputHTMLAttributes<HTMLInputElement>, "size"> {
+  /** Optional label text displayed above the input */
   label?: string;
+  /** Optional error message displayed below the input */
   error?: string;
+  /** Size variant of the input */
   size?: InputSize;
+  /** Additional CSS classes */
   className?: string;
 }
 
@@ -28,6 +39,28 @@ const sizeClasses: Record<InputSize, { container: string; input: string }> = {
   },
 };
 
+/**
+ * Input component that follows the Plume UI design system.
+ *
+ * @example
+ * ```tsx
+ * // Basic usage
+ * <Input placeholder="Enter your name" />
+ *
+ * // With label and error
+ * <Input
+ *   label="Email"
+ *   type="email"
+ *   placeholder="Enter your email"
+ *   error="Please enter a valid email"
+ * />
+ *
+ * // Different sizes
+ * <Input size="sm" placeholder="Small input" />
+ * <Input size="md" placeholder="Medium input" />
+ * <Input size="lg" placeholder="Large input" />
+ * ```
+ */
 export function Input({
   label,
   error,

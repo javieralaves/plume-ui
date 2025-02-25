@@ -1,18 +1,60 @@
 import { cn } from "@/lib/utils";
 import React, { useEffect, useRef, useState, useCallback } from "react";
 
+/**
+ * A versatile slider component that supports both single and range values.
+ * Features step markers, labels, and keyboard navigation.
+ *
+ * @example
+ * ```tsx
+ * // Basic usage
+ * const [value, setValue] = useState(50);
+ * <Slider value={value} onChange={setValue} />
+ *
+ * // Range slider
+ * const [range, setRange] = useState([20, 80]);
+ * <Slider value={range} onChange={setRange} />
+ *
+ * // With step markers and labels
+ * <Slider
+ *   min={0}
+ *   max={100}
+ *   step={10}
+ *   showLabels
+ *   value={value}
+ *   onChange={setValue}
+ * />
+ *
+ * // Disabled state
+ * <Slider disabled value={30} />
+ * ```
+ */
 interface SliderProps {
+  /** Minimum value of the slider */
   min?: number;
+  /** Maximum value of the slider */
   max?: number;
+  /** Step increment value */
   step?: number;
+  /** Current value(s) of the slider. Use array for range slider */
   value?: number | [number, number];
+  /** Initial value(s) of the slider. Use array for range slider */
   defaultValue?: number | [number, number];
+  /** Callback fired when the value changes */
   onChange?: (value: number | [number, number]) => void;
+  /** Whether to show min/max/current value labels */
   showLabels?: boolean;
+  /** Whether the slider is disabled */
   disabled?: boolean;
+  /** Additional CSS classes */
   className?: string;
 }
 
+/**
+ * Slider component that follows the Plume UI design system.
+ * Supports both single value and range selection modes.
+ * Implements keyboard navigation and ARIA attributes for accessibility.
+ */
 export function Slider({
   min = 0,
   max = 100,
@@ -131,14 +173,88 @@ export function Slider({
     getValueFromPosition,
   ]);
 
+  const handleKeyDown = (
+    event: React.KeyboardEvent,
+    thumb: "start" | "end"
+  ) => {
+    if (disabled) return;
+
+    let newValue: number | [number, number] = internalValue;
+    const currentValue = Array.isArray(internalValue)
+      ? internalValue[thumb === "start" ? 0 : 1]
+      : (internalValue as number);
+
+    switch (event.key) {
+      case "ArrowRight":
+      case "ArrowUp":
+        event.preventDefault();
+        if (Array.isArray(internalValue)) {
+          const [start, end] = internalValue;
+          newValue =
+            thumb === "start"
+              ? [Math.min(end, currentValue + step), end]
+              : [start, Math.min(max, currentValue + step)];
+        } else {
+          newValue = Math.min(max, currentValue + step);
+        }
+        break;
+
+      case "ArrowLeft":
+      case "ArrowDown":
+        event.preventDefault();
+        if (Array.isArray(internalValue)) {
+          const [start, end] = internalValue;
+          newValue =
+            thumb === "start"
+              ? [Math.max(min, currentValue - step), end]
+              : [start, Math.max(start, currentValue - step)];
+        } else {
+          newValue = Math.max(min, currentValue - step);
+        }
+        break;
+
+      case "Home":
+        event.preventDefault();
+        if (Array.isArray(internalValue)) {
+          const [_, end] = internalValue;
+          newValue = thumb === "start" ? [min, end] : [min, min];
+        } else {
+          newValue = min;
+        }
+        break;
+
+      case "End":
+        event.preventDefault();
+        if (Array.isArray(internalValue)) {
+          const [start, _] = internalValue;
+          newValue = thumb === "start" ? [max, max] : [start, max];
+        } else {
+          newValue = max;
+        }
+        break;
+
+      default:
+        return;
+    }
+
+    setInternalValue(newValue);
+    onChange?.(newValue);
+  };
+
   const renderThumb = (value: number, type: "start" | "end") => (
     <div
+      role="slider"
+      tabIndex={disabled ? -1 : 0}
+      aria-valuemin={min}
+      aria-valuemax={max}
+      aria-valuenow={value}
+      aria-disabled={disabled}
       className={cn(
         "absolute top-1/2 -translate-y-1/2 -translate-x-1/2",
         "w-5 h-5 rounded-full bg-white",
         "border border-border-medium shadow-md",
         "cursor-pointer transition-shadow",
-        "hover:shadow-lg",
+        "hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2",
         disabled && "cursor-not-allowed opacity-50",
         isDragging && activeThumb === type && "shadow-lg scale-110"
       )}

@@ -12,6 +12,26 @@ import {
 } from "react";
 import React from "react";
 
+/**
+ * A fully accessible dropdown menu component that supports keyboard navigation,
+ * positioning, and nested items.
+ *
+ * @example
+ * ```tsx
+ * <DropdownMenu>
+ *   <DropdownTrigger>
+ *     <Button>Open Menu</Button>
+ *   </DropdownTrigger>
+ *   <DropdownContent>
+ *     <DropdownItem>Profile</DropdownItem>
+ *     <DropdownItem>Settings</DropdownItem>
+ *     <DropdownDivider />
+ *     <DropdownItem>Logout</DropdownItem>
+ *   </DropdownContent>
+ * </DropdownMenu>
+ * ```
+ */
+
 interface DropdownContextType {
   isOpen: boolean;
   setIsOpen: (value: boolean) => void;
@@ -22,6 +42,10 @@ interface DropdownContextType {
 
 const DropdownContext = createContext<DropdownContextType | null>(null);
 
+/**
+ * Hook to access the dropdown context within dropdown components.
+ * @throws {Error} If used outside of a DropdownMenu component
+ */
 const useDropdown = () => {
   const context = useContext(DropdownContext);
   if (!context) {
@@ -30,31 +54,59 @@ const useDropdown = () => {
   return context;
 };
 
+/**
+ * Props for the DropdownMenu component
+ */
 interface DropdownMenuProps {
+  /** Content of the dropdown menu */
   children: ReactNode;
+  /** Additional CSS classes */
   className?: string;
 }
 
+/**
+ * Props for the DropdownTrigger component
+ */
 interface DropdownTriggerProps {
+  /** Button element that triggers the dropdown */
   children: React.ReactElement<ButtonProps>;
+  /** Additional CSS classes */
   className?: string;
 }
 
+/**
+ * Props for the DropdownContent component
+ */
 interface DropdownContentProps {
+  /** Content to be displayed in the dropdown */
   children: ReactNode;
+  /** Additional CSS classes */
   className?: string;
 }
 
+/**
+ * Props for individual dropdown items
+ */
 interface DropdownItemProps {
+  /** Content of the dropdown item */
   children: ReactNode;
+  /** Optional icon to display before the content */
   icon?: ReactNode;
+  /** Additional CSS classes */
   className?: string;
+  /** Click handler for the item */
   onClick?: () => void;
+  /** Whether the item is disabled */
   disabled?: boolean;
+  /** Whether the item is currently active/selected */
   isActive?: boolean;
 }
 
+/**
+ * Props for the divider component
+ */
 interface DropdownDividerProps {
+  /** Additional CSS classes */
   className?: string;
 }
 
@@ -257,3 +309,10 @@ export function DropdownDivider({ className }: DropdownDividerProps) {
     />
   );
 }
+
+// Add displayNames for components
+DropdownMenu.displayName = "DropdownMenu";
+DropdownTrigger.displayName = "DropdownTrigger";
+DropdownContent.displayName = "DropdownContent";
+DropdownItem.displayName = "DropdownItem";
+DropdownDivider.displayName = "DropdownDivider";

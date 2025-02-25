@@ -9,6 +9,9 @@ import React, {
 } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
+/**
+ * Positions where the toast notifications can appear on the screen.
+ */
 export type ToastPosition =
   | "top-right"
   | "top-left"
@@ -17,22 +20,40 @@ export type ToastPosition =
   | "top-center"
   | "bottom-center";
 
+/**
+ * Configuration for an individual toast notification.
+ */
 export interface Toast {
+  /** Unique identifier for the toast */
   id: string;
+  /** Optional title text displayed at the top of the toast */
   title?: string;
+  /** Main message content of the toast */
   message: string;
+  /** Duration in milliseconds before the toast auto-dismisses. Use Infinity to prevent auto-dismiss */
   duration?: number;
+  /** Optional action button configuration */
   action?: {
+    /** Text label for the action button */
     label: string;
+    /** Callback function when action button is clicked */
     onClick: () => void;
   };
 }
 
+/**
+ * Context for managing toast notifications globally.
+ */
 interface ToastContextValue {
+  /** Array of active toast notifications */
   toasts: Toast[];
+  /** Function to add a new toast notification */
   addToast: (toast: Omit<Toast, "id">) => void;
+  /** Function to remove a toast by its ID */
   removeToast: (id: string) => void;
+  /** Current position setting for all toasts */
   position: ToastPosition;
+  /** Function to update the position of all toasts */
   setPosition: (position: ToastPosition) => void;
 }
 
@@ -47,6 +68,36 @@ const positionStyles: Record<ToastPosition, string> = {
   "bottom-center": "bottom-4 left-1/2 -translate-x-1/2 items-center",
 };
 
+/**
+ * Provider component that enables toast notifications throughout the app.
+ *
+ * @example
+ * ```tsx
+ * // Wrap your app with the provider
+ * <ToastProvider defaultPosition="bottom-right">
+ *   <App />
+ * </ToastProvider>
+ *
+ * // Use the toast hook in any component
+ * function MyComponent() {
+ *   const { addToast } = useToast();
+ *
+ *   const showToast = () => {
+ *     addToast({
+ *       title: "Success",
+ *       message: "Operation completed",
+ *       duration: 3000,
+ *       action: {
+ *         label: "Undo",
+ *         onClick: () => console.log("Undo clicked")
+ *       }
+ *     });
+ *   };
+ *
+ *   return <button onClick={showToast}>Show Toast</button>;
+ * }
+ * ```
+ */
 export function ToastProvider({
   children,
   defaultPosition = "bottom-right",

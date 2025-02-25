@@ -3,15 +3,43 @@
 import { ButtonHTMLAttributes } from "react";
 import { cn } from "@/lib/utils";
 
+/**
+ * Available sizes for the Switch component.
+ */
 type SwitchSize = "sm" | "md" | "lg";
 
+/**
+ * A toggle switch component that provides an alternative to checkboxes.
+ * Follows WAI-ARIA switch pattern for accessibility.
+ *
+ * @example
+ * ```tsx
+ * // Basic usage
+ * const [enabled, setEnabled] = useState(false);
+ * <Switch checked={enabled} onChange={setEnabled} label="Notifications" />
+ *
+ * // Different sizes
+ * <Switch size="sm" checked={value} onChange={setValue} label="Small switch" />
+ * <Switch size="md" checked={value} onChange={setValue} label="Medium switch" />
+ * <Switch size="lg" checked={value} onChange={setValue} label="Large switch" />
+ *
+ * // Disabled state
+ * <Switch disabled checked={true} onChange={() => {}} label="Disabled switch" />
+ * ```
+ */
 interface SwitchProps
   extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "onChange"> {
+  /** The current state of the switch */
   checked: boolean;
+  /** Callback fired when the state changes */
   onChange: (checked: boolean) => void;
+  /** The size variant of the switch */
   size?: SwitchSize;
+  /** Optional label text displayed next to the switch */
   label?: string;
+  /** Whether the switch is disabled */
   disabled?: boolean;
+  /** Additional CSS classes */
   className?: string;
 }
 
@@ -45,6 +73,11 @@ const sizeClasses: Record<
   },
 };
 
+/**
+ * Switch component that follows the Plume UI design system.
+ * Implements the WAI-ARIA switch pattern for accessibility.
+ * Supports keyboard navigation (Space and Enter keys).
+ */
 export function Switch({
   checked,
   onChange,

@@ -8,28 +8,101 @@ import {
 } from "lucide-react";
 import { Checkbox } from "./Checkbox";
 
+/**
+ * Sort direction type for table columns
+ */
 export type SortDirection = "asc" | "desc" | null;
 
+/**
+ * Configuration for a table column
+ */
 export interface Column<T> {
+  /** Unique identifier for the column */
   key: string;
+  /** Display text for the column header */
   header: string;
+  /** Whether the column can be sorted */
   sortable?: boolean;
+  /** Custom render function for cell content */
   render?: (value: unknown, row: T) => React.ReactNode;
 }
 
+/**
+ * A feature-rich data table component with sorting, pagination, selection, and expandable rows.
+ *
+ * @example
+ * ```tsx
+ * // Basic usage
+ * const columns = [
+ *   { key: 'name', header: 'Name', sortable: true },
+ *   { key: 'age', header: 'Age', sortable: true },
+ *   {
+ *     key: 'status',
+ *     header: 'Status',
+ *     render: (value) => <Badge variant={value === 'active' ? 'success' : 'error'}>{value}</Badge>
+ *   }
+ * ];
+ *
+ * const data = [
+ *   { id: 1, name: 'John', age: 30, status: 'active' },
+ *   { id: 2, name: 'Jane', age: 25, status: 'inactive' }
+ * ];
+ *
+ * // Simple table with selection
+ * <DataTable
+ *   data={data}
+ *   columns={columns}
+ *   keyField="id"
+ *   selectable
+ *   pageSize={10}
+ *   onSelectionChange={handleSelectionChange}
+ * />
+ *
+ * // With expandable rows
+ * <DataTable
+ *   data={data}
+ *   columns={columns}
+ *   keyField="id"
+ *   expandable
+ *   renderExpandedRow={(row) => (
+ *     <div>Additional details for {row.name}</div>
+ *   )}
+ * />
+ * ```
+ */
 export interface DataTableProps<T> {
+  /** Array of data items to display in the table */
   data: T[];
+  /** Array of column configurations */
   columns: Column<T>[];
+  /** Key field in data items used as unique identifier */
   keyField: keyof T;
+  /** Whether to alternate row background colors */
   alternateRowBackground?: boolean;
+  /** Whether to enable row selection */
   selectable?: boolean;
+  /** Whether to enable expandable rows */
   expandable?: boolean;
+  /** Number of rows per page */
   pageSize?: number;
+  /** Render function for expanded row content */
   renderExpandedRow?: (row: T) => React.ReactNode;
+  /** Callback fired when a row is clicked */
   onRowClick?: (row: T) => void;
+  /** Callback fired when row selection changes */
   onSelectionChange?: (selectedRows: T[]) => void;
 }
 
+/**
+ * DataTable component that follows the Plume UI design system.
+ * Provides a rich set of features including:
+ * - Sorting (click column headers)
+ * - Pagination
+ * - Row selection
+ * - Expandable rows
+ * - Custom cell rendering
+ * - Responsive design
+ */
 export function DataTable<T>({
   data,
   columns,

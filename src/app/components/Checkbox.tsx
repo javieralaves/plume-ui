@@ -4,13 +4,46 @@ import { InputHTMLAttributes, forwardRef } from "react";
 import { Check, Minus } from "lucide-react";
 import { cn } from "@/lib/utils";
 
+/**
+ * Available sizes for the Checkbox component.
+ */
 type CheckboxSize = "sm" | "md" | "lg";
 
+/**
+ * A customizable checkbox component that supports different sizes, states, and labels.
+ * Extends the native input checkbox with additional styling and functionality.
+ *
+ * @example
+ * ```tsx
+ * // Basic usage
+ * <Checkbox label="Accept terms" />
+ *
+ * // Different sizes
+ * <Checkbox size="sm" label="Small checkbox" />
+ * <Checkbox size="md" label="Medium checkbox" />
+ * <Checkbox size="lg" label="Large checkbox" />
+ *
+ * // Indeterminate state
+ * <Checkbox indeterminate label="Select all" />
+ *
+ * // Controlled component
+ * const [checked, setChecked] = useState(false);
+ * <Checkbox
+ *   checked={checked}
+ *   onChange={(e) => setChecked(e.target.checked)}
+ *   label="Controlled checkbox"
+ * />
+ * ```
+ */
 interface CheckboxProps
   extends Omit<InputHTMLAttributes<HTMLInputElement>, "size"> {
+  /** Whether the checkbox is in an indeterminate state */
   indeterminate?: boolean;
+  /** The size variant of the checkbox */
   size?: CheckboxSize;
+  /** Optional label text displayed next to the checkbox */
   label?: string;
+  /** Additional CSS classes */
   className?: string;
 }
 
@@ -29,6 +62,11 @@ const sizeClasses: Record<CheckboxSize, { container: string; icon: string }> = {
   },
 };
 
+/**
+ * Checkbox component that follows the Plume UI design system.
+ * Supports multiple sizes, indeterminate state, and labels.
+ * Implements proper accessibility attributes and keyboard navigation.
+ */
 export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
   (
     {

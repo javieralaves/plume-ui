@@ -12,13 +12,38 @@ type ButtonVariant =
   | "disabled"
   | "select";
 
+/**
+ * A versatile button component that supports multiple variants, sizes, and icon configurations.
+ *
+ * @example
+ * ```tsx
+ * // Basic usage
+ * <Button>Click me</Button>
+ *
+ * // With variant and size
+ * <Button variant="primary" size="lg">Large Button</Button>
+ *
+ * // With icons
+ * <Button iconLeft={Search}>Search</Button>
+ *
+ * // Icon only button
+ * <Button iconOnly iconLeft={Menu} aria-label="Menu" />
+ * ```
+ */
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  /** The content to be rendered inside the button */
   children?: ReactNode;
+  /** The size variant of the button */
   size?: ButtonSize;
+  /** The visual style variant of the button */
   variant?: ButtonVariant;
+  /** Additional CSS classes to apply */
   className?: string;
+  /** Icon component to render on the left side */
   iconLeft?: LucideIcon;
+  /** Icon component to render on the right side */
   iconRight?: LucideIcon;
+  /** Whether the button should only display an icon */
   iconOnly?: boolean;
 }
 
@@ -48,6 +73,10 @@ const variantClasses: Record<ButtonVariant, string> = {
     flex items-center justify-between`,
 };
 
+/**
+ * Button component that follows the Plume UI design system.
+ * Supports multiple variants, sizes, and icon configurations.
+ */
 export function Button({
   children,
   size = "md",
