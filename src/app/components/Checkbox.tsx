@@ -70,14 +70,17 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
           />
           <div
             className={cn(
-              "flex items-center justify-center rounded transition-colors",
-              "border border-border-medium bg-surface-primary",
+              "flex items-center justify-center rounded transition-colors shadow-sm",
+              "border bg-white dark:bg-neutral-900",
+              !checked && !indeterminate && "border-border-heavy",
               checked && "bg-primary border-primary",
               indeterminate && "bg-primary border-primary",
-              disabled && !checked && "border-border-light opacity-50",
+              disabled &&
+                !checked &&
+                "border-border-light bg-neutral-50 dark:bg-neutral-800",
               disabled &&
                 (checked || indeterminate) &&
-                "bg-border-medium opacity-50",
+                "bg-border-medium border-border-medium opacity-50",
               disabled && "cursor-not-allowed",
               sizeClasses[size].container
             )}
