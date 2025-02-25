@@ -42,6 +42,8 @@ import {
   DialogBody,
   DialogFooter,
 } from "./components/Dialog";
+import { Accordion, AccordionItem } from "./components/Accordion";
+import { Slider } from "./components/Slider";
 
 export default function Home() {
   const [switches, setSwitches] = useState({
@@ -99,6 +101,14 @@ export default function Home() {
     basic: false,
     confirmation: false,
     scrollable: false,
+  });
+
+  const [sliderValues, setSliderValues] = useState({
+    basic: 50,
+    withSteps: 40,
+    withLabels: 60,
+    range: [20, 80] as [number, number],
+    disabled: 30,
   });
 
   const handleSwitchChange =
@@ -1607,6 +1617,172 @@ export default function Home() {
                     </Button>
                   </DialogFooter>
                 </Dialog>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Accordion Component Demo */}
+        <section>
+          <h2 className="app-h2 mb-8">Accordion Component</h2>
+          <div className="space-y-8">
+            {/* Default Accordion */}
+            <div className="space-y-2">
+              <h3 className="app-h3 text-text-secondary">Default Accordion</h3>
+              <Accordion>
+                <AccordionItem title="What is an accordion?">
+                  An accordion is a vertically stacked set of interactive
+                  headings that each reveal a section of content. It's commonly
+                  used to reduce the need to scroll when presenting multiple
+                  sections of content on a single page.
+                </AccordionItem>
+                <AccordionItem title="How does it work?">
+                  Click on the accordion header to expand or collapse the
+                  content. Only one section can be expanded at a time in the
+                  default mode. The component is fully accessible and can be
+                  navigated using keyboard controls.
+                </AccordionItem>
+                <AccordionItem title="What are the keyboard controls?">
+                  Use the up and down arrow keys to navigate between accordion
+                  headers. Press Enter or Space to expand/collapse the current
+                  section. Use Home to go to the first item and End to go to the
+                  last item.
+                </AccordionItem>
+              </Accordion>
+            </div>
+
+            {/* Multi-Expand Accordion */}
+            <div className="space-y-2">
+              <h3 className="app-h3 text-text-secondary">
+                Multi-Expand Accordion
+              </h3>
+              <Accordion allowMultiple>
+                <AccordionItem title="Multiple sections can be open">
+                  In this mode, multiple accordion sections can be expanded
+                  simultaneously. This is useful when users need to compare
+                  information between sections.
+                </AccordionItem>
+                <AccordionItem title="Independent sections">
+                  Each section operates independently, allowing users to expand
+                  or collapse sections without affecting others.
+                </AccordionItem>
+                <AccordionItem title="Great for complex content">
+                  This mode is particularly useful for displaying complex
+                  content where users might need to reference multiple sections
+                  at once.
+                </AccordionItem>
+              </Accordion>
+            </div>
+
+            {/* Borderless Accordion */}
+            <div className="space-y-2">
+              <h3 className="app-h3 text-text-secondary">
+                Borderless Accordion
+              </h3>
+              <Accordion variant="borderless">
+                <AccordionItem title="Clean and minimal">
+                  The borderless variant provides a clean, minimal look without
+                  dividers between sections.
+                </AccordionItem>
+                <AccordionItem title="Perfect for cards">
+                  This style works well when the accordion is placed within a
+                  card or another container that already provides visual
+                  structure.
+                </AccordionItem>
+                <AccordionItem title="Maintains functionality">
+                  While the appearance is different, all the same functionality
+                  and accessibility features are maintained.
+                </AccordionItem>
+              </Accordion>
+            </div>
+          </div>
+        </section>
+
+        {/* Slider Component Demo */}
+        <section>
+          <h2 className="app-h2 mb-8">Slider Component</h2>
+          <div className="space-y-8">
+            {/* Basic Slider */}
+            <div className="space-y-2">
+              <h3 className="app-h3 text-text-secondary">Basic Slider</h3>
+              <div className="max-w-sm">
+                <Slider
+                  value={sliderValues.basic}
+                  onChange={(value) =>
+                    setSliderValues((prev) => ({
+                      ...prev,
+                      basic: value as number,
+                    }))
+                  }
+                />
+              </div>
+            </div>
+
+            {/* Slider with Steps */}
+            <div className="space-y-2">
+              <h3 className="app-h3 text-text-secondary">Slider with Steps</h3>
+              <div className="max-w-sm">
+                <Slider
+                  value={sliderValues.withSteps}
+                  step={10}
+                  onChange={(value) =>
+                    setSliderValues((prev) => ({
+                      ...prev,
+                      withSteps: value as number,
+                    }))
+                  }
+                />
+              </div>
+            </div>
+
+            {/* Slider with Labels */}
+            <div className="space-y-2">
+              <h3 className="app-h3 text-text-secondary">Slider with Labels</h3>
+              <div className="max-w-sm">
+                <Slider
+                  value={sliderValues.withLabels}
+                  showLabels
+                  onChange={(value) =>
+                    setSliderValues((prev) => ({
+                      ...prev,
+                      withLabels: value as number,
+                    }))
+                  }
+                />
+              </div>
+            </div>
+
+            {/* Range Slider */}
+            <div className="space-y-2">
+              <h3 className="app-h3 text-text-secondary">Range Slider</h3>
+              <div className="max-w-sm">
+                <Slider
+                  value={sliderValues.range}
+                  showLabels
+                  onChange={(value) =>
+                    setSliderValues((prev) => ({
+                      ...prev,
+                      range: value as [number, number],
+                    }))
+                  }
+                />
+              </div>
+            </div>
+
+            {/* Disabled Slider */}
+            <div className="space-y-2">
+              <h3 className="app-h3 text-text-secondary">Disabled Slider</h3>
+              <div className="max-w-sm">
+                <Slider
+                  value={sliderValues.disabled}
+                  disabled
+                  onChange={(value) =>
+                    setSliderValues((prev) => ({
+                      ...prev,
+                      disabled: value as number,
+                    }))
+                  }
+                />
               </div>
             </div>
           </div>
