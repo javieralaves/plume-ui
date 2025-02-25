@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 
 interface SliderProps {
   min?: number;
@@ -43,12 +43,15 @@ export function Slider({
     return ((value - min) / (max - min)) * 100;
   };
 
-  const getValueFromPosition = (position: number) => {
-    const percentage = Math.max(0, Math.min(100, position));
-    const rawValue = ((max - min) * percentage) / 100 + min;
-    const steppedValue = Math.round(rawValue / step) * step;
-    return Math.min(max, Math.max(min, steppedValue));
-  };
+  const getValueFromPosition = useCallback(
+    (position: number) => {
+      const percentage = Math.max(0, Math.min(100, position));
+      const rawValue = ((max - min) * percentage) / 100 + min;
+      const steppedValue = Math.round(rawValue / step) * step;
+      return Math.min(max, Math.max(min, steppedValue));
+    },
+    [max, min, step]
+  );
 
   const handleTrackClick = (event: React.MouseEvent<HTMLDivElement>) => {
     if (disabled) return;

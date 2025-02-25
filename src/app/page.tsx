@@ -998,13 +998,13 @@ export default function Home() {
                 <div className="flex gap-4 items-center">
                   <Avatar
                     size="md"
-                    src="/non-existent-image.jpg"
+                    src="https://images.unsplash.com/broken-image"
                     initials="FB"
                     alt="Fallback example"
                   />
                   <Avatar
                     size="md"
-                    src="/another-missing-image.jpg"
+                    src="https://images.unsplash.com/does-not-exist"
                     alt="Fallback to icon"
                   />
                 </div>
@@ -1970,11 +1970,14 @@ export default function Home() {
                   ]}
                   keyField="id"
                   expandable
-                  renderExpandedRow={(row) => (
-                    <div className="text-app-body-sm text-text-secondary">
-                      <strong>Description:</strong> {row.description}
-                    </div>
-                  )}
+                  renderExpandedRow={
+                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                    (row) => (
+                      <div className="text-app-body-sm text-text-secondary">
+                        <strong>Description:</strong> {row.description}
+                      </div>
+                    )
+                  }
                 />
               </div>
 
