@@ -5,14 +5,20 @@ import { cn } from "@/lib/utils";
 import { LucideIcon } from "lucide-react";
 
 type ButtonSize = "sm" | "md" | "lg";
-type ButtonVariant = "primary" | "secondary" | "destructive" | "disabled";
+type ButtonVariant =
+  | "primary"
+  | "secondary"
+  | "destructive"
+  | "disabled"
+  | "select";
 
-interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children?: ReactNode;
   size?: ButtonSize;
   variant?: ButtonVariant;
   className?: string;
   iconLeft?: LucideIcon;
+  iconRight?: LucideIcon;
   iconOnly?: boolean;
 }
 
@@ -23,9 +29,9 @@ const sizeClasses: Record<ButtonSize, string> = {
 };
 
 const iconOnlySizeClasses: Record<ButtonSize, string> = {
-  sm: "h-8 w-8 p-1.5",
-  md: "h-10 w-10 p-2",
-  lg: "h-12 w-12 p-2.5",
+  sm: "h-8 w-8",
+  md: "h-10 w-10",
+  lg: "h-12 w-12",
 };
 
 const variantClasses: Record<ButtonVariant, string> = {
@@ -36,6 +42,10 @@ const variantClasses: Record<ButtonVariant, string> = {
     dark:bg-neutral-900 dark:text-white dark:hover:bg-neutral-800`,
   destructive: "bg-error hover:bg-error/90 active:bg-error/80 text-white",
   disabled: "bg-neutral-300 text-text-secondary cursor-not-allowed",
+  select: `bg-white hover:bg-neutral-50 active:bg-neutral-100 
+    text-text-primary border border-border-medium shadow-sm
+    dark:bg-neutral-900 dark:text-white dark:hover:bg-neutral-800
+    flex items-center justify-between`,
 };
 
 export function Button({
@@ -45,6 +55,7 @@ export function Button({
   className,
   disabled,
   iconLeft: IconLeft,
+  iconRight: IconRight,
   iconOnly = false,
   ...props
 }: ButtonProps) {
@@ -56,12 +67,20 @@ export function Button({
   // If disabled is true, force the variant to be 'disabled'
   const effectiveVariant = disabled ? "disabled" : variant;
 
+  const getIconSize = () => {
+    if (iconOnly) {
+      return size === "sm" ? "w-4 h-4" : "w-5 h-5";
+    }
+    return size === "sm" ? "w-4 h-4" : "w-5 h-5";
+  };
+
   return (
     <button
       className={cn(
         "inline-flex items-center justify-center rounded-lg transition-all font-medium",
         iconOnly ? iconOnlySizeClasses[size] : sizeClasses[size],
         variantClasses[effectiveVariant],
+        variant === "select" && "px-4",
         className
       )}
       disabled={disabled || variant === "disabled"}
@@ -69,17 +88,15 @@ export function Button({
     >
       {IconLeft && (
         <IconLeft
-          className={cn(
-            "stroke-2",
-            iconOnly
-              ? "w-full h-full"
-              : size === "sm"
-              ? "w-4 h-4 mr-1.5"
-              : "w-5 h-5 mr-2"
-          )}
+          className={cn("stroke-2", getIconSize(), !iconOnly && "mr-2")}
         />
       )}
       {!iconOnly && children}
+      {IconRight && (
+        <IconRight
+          className={cn("stroke-2", getIconSize(), !iconOnly && "ml-2")}
+        />
+      )}
     </button>
   );
 }

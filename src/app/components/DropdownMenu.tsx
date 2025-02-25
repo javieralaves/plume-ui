@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils";
 import { ChevronDown } from "lucide-react";
+import { ButtonProps } from "./Button";
 import {
   ReactNode,
   useEffect,
@@ -9,6 +10,7 @@ import {
   useContext,
   ButtonHTMLAttributes,
 } from "react";
+import React from "react";
 
 interface DropdownContextType {
   isOpen: boolean;
@@ -33,8 +35,8 @@ interface DropdownMenuProps {
   className?: string;
 }
 
-interface DropdownTriggerProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  children: ReactNode;
+interface DropdownTriggerProps {
+  children: React.ReactElement<ButtonProps>;
   className?: string;
 }
 
@@ -76,25 +78,12 @@ export function DropdownTrigger({
 }: DropdownTriggerProps) {
   const { isOpen, setIsOpen } = useDropdown();
 
-  return (
-    <button
-      type="button"
-      className={cn(
-        "flex items-center gap-2 bg-white border border-border-medium",
-        "shadow-sm hover:shadow-md rounded-md px-3 py-2",
-        "text-text-primary focus:outline-none focus:ring-2 focus:ring-primary/20",
-        className
-      )}
-      onClick={() => setIsOpen(!isOpen)}
-      aria-expanded={isOpen}
-      {...props}
-    >
-      {children}
-      <ChevronDown
-        className={cn("w-4 h-4 transition-transform", isOpen && "rotate-180")}
-      />
-    </button>
-  );
+  return React.cloneElement(children, {
+    onClick: () => setIsOpen(!isOpen),
+    "aria-expanded": isOpen,
+    className: cn(className, children.props.className),
+    iconRight: children.props.iconOnly ? undefined : ChevronDown,
+  });
 }
 
 export function DropdownContent({ children, className }: DropdownContentProps) {
@@ -180,10 +169,10 @@ export function DropdownContent({ children, className }: DropdownContentProps) {
     <div
       ref={contentRef}
       className={cn(
-        "absolute z-10 w-full min-w-[200px]",
+        "absolute z-10 min-w-[200px]",
         shouldOpenUpward ? "bottom-full mb-1" : "top-full mt-1",
         "bg-white border border-border-light rounded-md shadow-lg",
-        "p-2",
+        "py-1.5 px-1.5",
         className
       )}
       role="menu"
@@ -225,7 +214,7 @@ export function DropdownItem({
     <div
       ref={itemRef}
       className={cn(
-        "flex items-center gap-2 px-4 py-2 rounded-md",
+        "flex items-center gap-3 px-2.5 py-1.5 rounded-md",
         "text-text-primary cursor-pointer",
         "hover:bg-neutral-50 active:bg-neutral-100",
         disabled && "opacity-50 cursor-not-allowed hover:bg-white",
@@ -246,7 +235,9 @@ export function DropdownItem({
         )
       }
     >
-      {icon && <span className="w-4 h-4">{icon}</span>}
+      {icon && (
+        <span className="w-5 h-5 flex items-center justify-center">{icon}</span>
+      )}
       {children}
     </div>
   );
