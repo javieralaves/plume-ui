@@ -6,45 +6,16 @@ import { useToast } from "../components/Toast";
 export function ToastDemo() {
   const { addToast } = useToast();
 
-  const showSuccessToast = () => {
+  const showBasicToast = () => {
     addToast({
-      type: "success",
-      title: "Success",
-      message: "Operation completed successfully",
-      duration: 3000,
-    });
-  };
-
-  const showErrorToast = () => {
-    addToast({
-      type: "error",
-      title: "Error",
-      message: "Something went wrong",
-      duration: 3000,
-    });
-  };
-
-  const showWarningToast = () => {
-    addToast({
-      type: "warning",
-      title: "Warning",
-      message: "Please review your input",
-      duration: 3000,
-    });
-  };
-
-  const showInfoToast = () => {
-    addToast({
-      type: "info",
-      title: "Information",
-      message: "Your task is in progress",
+      title: "Notification",
+      message: "This is a simple notification message",
       duration: 3000,
     });
   };
 
   const showToastWithAction = () => {
     addToast({
-      type: "info",
       title: "New Message",
       message: "You have a new message from Jane",
       duration: 5000,
@@ -57,7 +28,6 @@ export function ToastDemo() {
 
   const showPersistentToast = () => {
     addToast({
-      type: "warning",
       title: "Update Available",
       message: "A new version is available. Please update your app.",
       duration: Infinity,
@@ -80,10 +50,7 @@ export function ToastDemo() {
       <div className="space-y-4">
         <h3 className="text-lg font-medium">Basic Usage</h3>
         <div className="flex flex-wrap gap-4">
-          <Button onClick={showSuccessToast}>Show Success Toast</Button>
-          <Button onClick={showErrorToast}>Show Error Toast</Button>
-          <Button onClick={showWarningToast}>Show Warning Toast</Button>
-          <Button onClick={showInfoToast}>Show Info Toast</Button>
+          <Button onClick={showBasicToast}>Show Toast</Button>
         </div>
       </div>
 

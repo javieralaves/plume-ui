@@ -1,11 +1,5 @@
 import { cn } from "@/lib/utils";
-import {
-  CheckCircle,
-  AlertTriangle,
-  XCircle,
-  Info,
-  X as CloseIcon,
-} from "lucide-react";
+import { X as CloseIcon } from "lucide-react";
 import React, {
   createContext,
   useCallback,
@@ -15,7 +9,6 @@ import React, {
 } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
-export type ToastType = "success" | "warning" | "error" | "info";
 export type ToastPosition =
   | "top-right"
   | "top-left"
@@ -26,7 +19,6 @@ export type ToastPosition =
 
 export interface Toast {
   id: string;
-  type: ToastType;
   title?: string;
   message: string;
   duration?: number;
@@ -45,20 +37,6 @@ interface ToastContextValue {
 }
 
 const ToastContext = createContext<ToastContextValue | null>(null);
-
-const toastIcons = {
-  success: <CheckCircle className="w-5 h-5 text-success" />,
-  warning: <AlertTriangle className="w-5 h-5 text-warning" />,
-  error: <XCircle className="w-5 h-5 text-error" />,
-  info: <Info className="w-5 h-5 text-text-secondary" />,
-};
-
-const toastStyles = {
-  success: "bg-success-light border-success",
-  warning: "bg-warning-light border-warning",
-  error: "bg-error-light border-error",
-  info: "bg-surface-secondary border-border-medium",
-};
 
 const positionStyles: Record<ToastPosition, string> = {
   "top-right": "top-4 right-4 items-end",
@@ -125,7 +103,7 @@ function ToastContainer() {
   );
 }
 
-function Toast({ id, type, title, message, duration = 3000, action }: Toast) {
+function Toast({ id, title, message, duration = 3000, action }: Toast) {
   const { removeToast } = useToast();
 
   useEffect(() => {
@@ -140,14 +118,14 @@ function Toast({ id, type, title, message, duration = 3000, action }: Toast) {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 50, scale: 0.3 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.5, transition: { duration: 0.2 } }}
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -5 }}
+      transition={{ duration: 0.2, ease: "easeOut" }}
       className={cn(
         "relative w-full pointer-events-auto",
-        "bg-white border shadow-lg rounded-md px-4 py-3",
-        "transition-colors duration-300 ease-in-out",
-        toastStyles[type]
+        "bg-white border border-border-light rounded-md px-4 py-3",
+        "shadow-md transition-all duration-300 ease-in-out"
       )}
     >
       <button
@@ -157,22 +135,19 @@ function Toast({ id, type, title, message, duration = 3000, action }: Toast) {
         <CloseIcon className="w-4 h-4" />
       </button>
 
-      <div className="flex gap-3">
-        <div className="flex-shrink-0">{toastIcons[type]}</div>
-        <div className="flex-1 pr-6">
-          {title && (
-            <div className="font-medium text-app-body-sm mb-1">{title}</div>
-          )}
-          <div className="text-app-body-sm text-text-primary">{message}</div>
-          {action && (
-            <button
-              onClick={action.onClick}
-              className="mt-2 text-app-body-sm font-medium text-primary hover:text-primary-hover"
-            >
-              {action.label}
-            </button>
-          )}
-        </div>
+      <div className="pr-6">
+        {title && (
+          <div className="font-medium text-app-body-sm mb-1">{title}</div>
+        )}
+        <div className="text-app-body-sm text-text-primary">{message}</div>
+        {action && (
+          <button
+            onClick={action.onClick}
+            className="mt-2 text-app-body-sm font-medium text-text-primary hover:text-text-secondary"
+          >
+            {action.label}
+          </button>
+        )}
       </div>
     </motion.div>
   );
