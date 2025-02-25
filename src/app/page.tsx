@@ -775,6 +775,7 @@ export default function Home() {
                       onChange={(value) =>
                         setActiveTab((prev) => ({ ...prev, modern: value }))
                       }
+                      hugContent
                     >
                       <TabList>
                         <Tab value="tab1">Dashboard</Tab>
@@ -806,6 +807,7 @@ export default function Home() {
                           traditional: value,
                         }))
                       }
+                      hugContent
                     >
                       <TabList>
                         <Tab value="tab1">Account</Tab>
@@ -822,6 +824,70 @@ export default function Home() {
                         <p>Notification preferences content goes here</p>
                       </TabPanel>
                     </Tabs>
+                  </div>
+                </div>
+              </div>
+
+              {/* Layout Options */}
+              <div className="space-y-2">
+                <h3 className="app-h3 text-text-secondary">Layout Options</h3>
+                <div className="space-y-8">
+                  <div>
+                    <h4 className="text-app-body font-medium mb-4">
+                      Hug Content
+                    </h4>
+                    <Tabs
+                      value={activeTab.demo}
+                      onChange={(value) =>
+                        setActiveTab((prev) => ({ ...prev, demo: value }))
+                      }
+                      hugContent
+                    >
+                      <TabList>
+                        <Tab value="tab1">Short</Tab>
+                        <Tab value="tab2">Longer Tab</Tab>
+                        <Tab value="tab3">Very Long Tab Name</Tab>
+                      </TabList>
+                      <TabPanel value="tab1">
+                        <p>Content for tab 1</p>
+                      </TabPanel>
+                      <TabPanel value="tab2">
+                        <p>Content for tab 2</p>
+                      </TabPanel>
+                      <TabPanel value="tab3">
+                        <p>Content for tab 3</p>
+                      </TabPanel>
+                    </Tabs>
+                  </div>
+
+                  <div>
+                    <h4 className="text-app-body font-medium mb-4">
+                      Full Width
+                    </h4>
+                    <div className="border border-border-light rounded-lg p-4">
+                      <Tabs
+                        value={activeTab.demo}
+                        onChange={(value) =>
+                          setActiveTab((prev) => ({ ...prev, demo: value }))
+                        }
+                        fullWidth
+                      >
+                        <TabList>
+                          <Tab value="tab1">First Tab</Tab>
+                          <Tab value="tab2">Second Tab</Tab>
+                          <Tab value="tab3">Third Tab</Tab>
+                        </TabList>
+                        <TabPanel value="tab1">
+                          <p>Content for tab 1</p>
+                        </TabPanel>
+                        <TabPanel value="tab2">
+                          <p>Content for tab 2</p>
+                        </TabPanel>
+                        <TabPanel value="tab3">
+                          <p>Content for tab 3</p>
+                        </TabPanel>
+                      </Tabs>
+                    </div>
                   </div>
                 </div>
               </div>

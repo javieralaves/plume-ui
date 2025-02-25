@@ -13,6 +13,8 @@ interface TabsProps {
   variant?: TabVariant;
   className?: string;
   children: React.ReactNode;
+  hugContent?: boolean;
+  fullWidth?: boolean;
 }
 
 interface TabProps {
@@ -34,6 +36,8 @@ interface TabsContextValue {
   size: TabSize;
   variant: TabVariant;
   baseId: string;
+  hugContent?: boolean;
+  fullWidth?: boolean;
 }
 
 const TabsContext = createContext<TabsContextValue | null>(null);
@@ -83,12 +87,22 @@ export function Tabs({
   variant = "modern",
   className,
   children,
+  hugContent = false,
+  fullWidth = false,
 }: TabsProps) {
   const baseId = useId();
 
   return (
     <TabsContext.Provider
-      value={{ activeTab: value, onChange, size, variant, baseId }}
+      value={{
+        activeTab: value,
+        onChange,
+        size,
+        variant,
+        baseId,
+        hugContent,
+        fullWidth,
+      }}
     >
       <div className={cn("space-y-2", className)}>{children}</div>
     </TabsContext.Provider>
@@ -105,7 +119,7 @@ export function TabList({
   const context = useContext(TabsContext);
   if (!context) throw new Error("TabList must be used within Tabs");
 
-  const { variant } = context;
+  const { variant, hugContent, fullWidth } = context;
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
   const handleKeyDown = (
@@ -132,13 +146,20 @@ export function TabList({
   return (
     <nav
       role="tablist"
-      className={cn("flex", variantClasses[variant].list, className)}
+      className={cn(
+        "flex",
+        hugContent && "inline-flex",
+        fullWidth && "w-full",
+        variantClasses[variant].list,
+        className
+      )}
     >
       {Array.isArray(children)
         ? children.map((child, index) => (
             <div
               key={index}
               onKeyDown={(e) => handleKeyDown(e, index)}
+              className={cn(fullWidth && "flex-1")}
               ref={(el) => {
                 const button = el?.querySelector("button");
                 if (button) tabRefs.current[index] = button;
@@ -156,7 +177,7 @@ export function Tab({ value, disabled, className, children }: TabProps) {
   const context = useContext(TabsContext);
   if (!context) throw new Error("Tab must be used within Tabs");
 
-  const { activeTab, onChange, size, variant, baseId } = context;
+  const { activeTab, onChange, size, variant, baseId, fullWidth } = context;
   const isSelected = value === activeTab;
   const id = `${baseId}-tab-${value}`;
   const panelId = `${baseId}-panel-${value}`;
@@ -171,6 +192,7 @@ export function Tab({ value, disabled, className, children }: TabProps) {
       onClick={() => !disabled && onChange(value)}
       className={cn(
         "focus:outline-none",
+        fullWidth && "w-full",
         sizeClasses[size].tab,
         variantClasses[variant].tab,
         isSelected
