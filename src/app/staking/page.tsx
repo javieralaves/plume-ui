@@ -2,13 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Tabs, TabList, Tab, TabPanel } from "../components/Tabs";
-import {
-  Card,
-  CardHeader,
-  CardBody,
-  CardFooter,
-  CardStat,
-} from "../components/Card";
+import { Card, CardHeader, CardBody, CardStat } from "../components/Card";
 import { DataTable, Column } from "../components/DataTable";
 import { Badge } from "../components/Badge";
 import { Button } from "../components/Button";
