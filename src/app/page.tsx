@@ -45,7 +45,7 @@ import {
 import { Accordion, AccordionItem } from "./components/Accordion";
 import { Slider } from "./components/Slider";
 import { ToastProvider, useToast } from "./components/Toast";
-import { DataTable } from "./components/DataTable/DataTable";
+import { DataTable } from "./components/DataTable";
 
 export default function Home() {
   const [switches, setSwitches] = useState({
@@ -1494,7 +1494,8 @@ export default function Home() {
                           View All Settings
                         </h4>
                         <p className="text-app-body-sm text-text-secondary">
-                          Configure your account preferences
+                          Enhance your team&apos;s productivity with our
+                          collaborative workspace tools and features.
                         </p>
                       </div>
                       <ArrowRight className="w-5 h-5 text-text-secondary" />
@@ -1510,8 +1511,8 @@ export default function Home() {
                   <Card image="https://images.unsplash.com/photo-1522071820081-009f0129c71c">
                     <CardHeader>Team Collaboration</CardHeader>
                     <CardBody>
-                      Enhance your team's productivity with our collaborative
-                      workspace tools and features.
+                      Enhance your team&apos;s productivity with our
+                      collaborative workspace tools and features.
                     </CardBody>
                     <CardFooter>
                       <Button size="sm">Learn More</Button>
@@ -1666,7 +1667,7 @@ export default function Home() {
                 <Accordion>
                   <AccordionItem title="What is an accordion?">
                     An accordion is a vertically stacked set of interactive
-                    headings that each reveal a section of content. It's
+                    headings that each reveal a section of content. It&apos;s
                     commonly used to reduce the need to scroll when presenting
                     multiple sections of content on a single page.
                   </AccordionItem>
@@ -1962,7 +1963,8 @@ export default function Home() {
                       key: "price",
                       header: "Price",
                       sortable: true,
-                      render: (value) => `$${value.toLocaleString()}`,
+                      render: (value: unknown) =>
+                        `$${(value as number).toLocaleString()}`,
                     },
                     { key: "stock", header: "Stock", sortable: true },
                   ]}
@@ -2027,15 +2029,15 @@ export default function Home() {
                       key: "progress",
                       header: "Progress",
                       sortable: true,
-                      render: (value) => (
+                      render: (value: unknown) => (
                         <div className="flex items-center gap-2">
                           <div className="w-24 h-2 bg-neutral-200 rounded-full overflow-hidden">
                             <div
                               className="h-full bg-primary rounded-full"
-                              style={{ width: `${value}%` }}
+                              style={{ width: `${value as number}%` }}
                             />
                           </div>
-                          <span>{value}%</span>
+                          <span>{value as number}%</span>
                         </div>
                       ),
                     },

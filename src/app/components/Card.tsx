@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils";
 import { ReactNode } from "react";
+import Image from "next/image";
 
 type CardVariant = "default" | "info" | "statistic" | "interactive";
 
@@ -70,10 +71,12 @@ export function Card({
     >
       {image && (
         <div className="relative -mx-4 -mt-4 mb-4 h-48 overflow-hidden rounded-t-lg">
-          <img
+          <Image
             src={image}
             alt=""
-            className="absolute inset-0 h-full w-full object-cover"
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
         </div>
       )}

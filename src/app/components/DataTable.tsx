@@ -6,7 +6,7 @@ import {
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
-import { Checkbox } from "../Checkbox";
+import { Checkbox } from "./Checkbox";
 
 export type SortDirection = "asc" | "desc" | null;
 
@@ -14,7 +14,7 @@ export interface Column<T> {
   key: string;
   header: string;
   sortable?: boolean;
-  render?: (value: any, row: T) => React.ReactNode;
+  render?: (value: unknown, row: T) => React.ReactNode;
 }
 
 export interface DataTableProps<T> {
@@ -56,7 +56,7 @@ export function DataTable<T>({
 
   // Sort and paginate data
   const sortedAndPaginatedData = useMemo(() => {
-    let processedData = [...data];
+    const processedData = [...data];
 
     // Apply sorting
     if (sortConfig.key && sortConfig.direction) {

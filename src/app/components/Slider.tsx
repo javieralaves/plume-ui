@@ -83,8 +83,10 @@ export function Slider({
   };
 
   useEffect(() => {
+    if (!isDragging) return;
+
     const handleMouseMove = (event: MouseEvent) => {
-      if (!isDragging || !trackRef.current) return;
+      if (!trackRef.current) return;
 
       const rect = trackRef.current.getBoundingClientRect();
       const percentage = ((event.clientX - rect.left) / rect.width) * 100;
@@ -110,16 +112,21 @@ export function Slider({
       setActiveThumb(null);
     };
 
-    if (isDragging) {
-      document.addEventListener("mousemove", handleMouseMove);
-      document.addEventListener("mouseup", handleMouseUp);
-    }
+    document.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("mouseup", handleMouseUp);
 
     return () => {
       document.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseup", handleMouseUp);
     };
-  }, [isDragging, activeThumb, onChange, isDualThumb, internalValue]);
+  }, [
+    isDragging,
+    activeThumb,
+    onChange,
+    isDualThumb,
+    internalValue,
+    getValueFromPosition,
+  ]);
 
   const renderThumb = (value: number, type: "start" | "end") => (
     <div
