@@ -9,14 +9,7 @@ import {
 } from "../components/Card";
 import { Button } from "../components/Button";
 import { Badge } from "../components/Badge";
-import {
-  Wallet,
-  ArrowUpRight,
-  Settings,
-  ChevronRight,
-  MoreVertical,
-  RefreshCw,
-} from "lucide-react";
+import { Wallet, Settings } from "lucide-react";
 
 export function CardDemo() {
   return (

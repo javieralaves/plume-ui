@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Card, CardHeader, CardBody, CardFooter } from "./Card";
 import { AssetInput } from "./AssetInput";
 import { Button } from "./Button";
@@ -37,6 +37,26 @@ export function StakingForm({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { addToast } = useToast();
 
+  const validateInput = useCallback(
+    (value: number | "") => {
+      if (value === "") {
+        setValidationError(undefined);
+        return false;
+      }
+      if (value <= 0) {
+        setValidationError("Amount must be greater than 0");
+        return false;
+      }
+      if (value > userBalance) {
+        setValidationError("Amount exceeds available balance");
+        return false;
+      }
+      setValidationError(undefined);
+      return true;
+    },
+    [userBalance]
+  );
+
   // Validate input whenever amount or balance changes
   useEffect(() => {
     // Only validate if there's a value
@@ -45,24 +65,7 @@ export function StakingForm({
     } else {
       setValidationError(undefined);
     }
-  }, [stakeAmount, userBalance]);
-
-  const validateInput = (value: number | "") => {
-    if (value === "") {
-      setValidationError(undefined);
-      return false;
-    }
-    if (value <= 0) {
-      setValidationError("Amount must be greater than 0");
-      return false;
-    }
-    if (value > userBalance) {
-      setValidationError("Amount exceeds available balance");
-      return false;
-    }
-    setValidationError(undefined);
-    return true;
-  };
+  }, [stakeAmount, validateInput]);
 
   const handleStakeClick = () => {
     if (typeof stakeAmount === "number" && validateInput(stakeAmount)) {
@@ -90,7 +93,7 @@ export function StakingForm({
       if (onTabChange) {
         onTabChange("earnings");
       }
-    } catch (error) {
+    } catch {
       addToast({
         title: "Transaction Failed",
         message: "Failed to stake PLUME. Please try again.",

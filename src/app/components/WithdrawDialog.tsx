@@ -31,7 +31,7 @@ export function WithdrawDialog({
     try {
       await onWithdraw(reward);
       onClose();
-    } catch (error) {
+    } catch {
       addToast({
         title: "Withdrawal Failed",
         message: "Please try again later.",

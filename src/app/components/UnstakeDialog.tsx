@@ -41,7 +41,7 @@ export function UnstakeDialog({
 
       onClose();
       onSuccess?.();
-    } catch (error) {
+    } catch {
       addToast({
         title: "Unstaking Failed",
         message: "Please try again later.",

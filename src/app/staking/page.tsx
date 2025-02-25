@@ -253,13 +253,20 @@ export default function StakingDashboard() {
     };
 
     calculateStats();
-  }, []);
+  }, [rewardsHistory]);
 
   const handleUnstake = async () => {
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    // In a real app, this would call the blockchain
-    setStakedBalance(0);
+    try {
+      // Simulate transaction delay
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+      setIsUnstakeDialogOpen(false);
+    } catch {
+      addToast({
+        title: "Transaction Failed",
+        message: "Failed to unstake PLUME. Please try again.",
+        duration: 5000,
+      });
+    }
   };
 
   // Handle withdrawal confirmation
@@ -285,7 +292,7 @@ export default function StakingDashboard() {
         message: `${reward.amount} PLUME has been withdrawn to your wallet.`,
         duration: 5000,
       });
-    } catch (error) {
+    } catch {
       setRewardsHistory((current) =>
         current.map((r) =>
           r.id === reward.id ? { ...r, isWithdrawing: false } : r
@@ -525,9 +532,4 @@ export default function StakingDashboard() {
       )}
     </div>
   );
-}
-
-// Helper function for conditional class names
-function cn(...classes: (string | boolean | undefined)[]) {
-  return classes.filter(Boolean).join(" ");
 }
