@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Check } from "lucide-react";
 import { ButtonProps } from "./Button";
 import {
   ReactNode,
@@ -51,6 +51,7 @@ interface DropdownItemProps {
   className?: string;
   onClick?: () => void;
   disabled?: boolean;
+  isActive?: boolean;
 }
 
 interface DropdownDividerProps {
@@ -188,6 +189,7 @@ export function DropdownItem({
   className,
   onClick,
   disabled,
+  isActive,
 }: DropdownItemProps) {
   const { setIsOpen, activeIndex, setActiveIndex, itemsRef } = useDropdown();
   const itemRef = useRef<HTMLDivElement>(null);
@@ -214,7 +216,8 @@ export function DropdownItem({
     <div
       ref={itemRef}
       className={cn(
-        "flex items-center gap-3 px-2.5 py-1.5 rounded-md",
+        "flex items-center gap-3 rounded-md relative",
+        "px-2.5 py-1.5",
         "text-text-primary cursor-pointer",
         "hover:bg-neutral-50 active:bg-neutral-100",
         disabled && "opacity-50 cursor-not-allowed hover:bg-white",
@@ -238,7 +241,10 @@ export function DropdownItem({
       {icon && (
         <span className="w-5 h-5 flex items-center justify-center">{icon}</span>
       )}
-      {children}
+      <span className="flex-1">{children}</span>
+      {isActive && (
+        <Check className="w-[18px] h-[18px] text-text-primary shrink-0" />
+      )}
     </div>
   );
 }

@@ -9,8 +9,12 @@ import {
 } from "../components/DropdownMenu";
 import { Button } from "../components/Button";
 import { Settings, User, LogOut, Bell } from "lucide-react";
+import { useState } from "react";
 
 export function DropdownMenuDemo() {
+  const [activeView, setActiveView] = useState("grid");
+  const [selectedTheme, setSelectedTheme] = useState("light");
+
   const handleAction = (action: string) => {
     console.log(`Dropdown action: ${action}`);
   };
@@ -41,6 +45,63 @@ export function DropdownMenuDemo() {
               <DropdownDivider />
               <DropdownItem onClick={() => handleAction("logout")}>
                 Log out
+              </DropdownItem>
+            </DropdownContent>
+          </DropdownMenu>
+        </div>
+      </div>
+
+      <div className="space-y-4">
+        <h3 className="text-lg font-medium">With Active Selection</h3>
+        <div className="flex items-start gap-4">
+          <DropdownMenu>
+            <DropdownTrigger>
+              <Button variant="select">View Options</Button>
+            </DropdownTrigger>
+            <DropdownContent>
+              <DropdownItem
+                onClick={() => setActiveView("grid")}
+                isActive={activeView === "grid"}
+              >
+                Grid View
+              </DropdownItem>
+              <DropdownItem
+                onClick={() => setActiveView("list")}
+                isActive={activeView === "list"}
+              >
+                List View
+              </DropdownItem>
+              <DropdownItem
+                onClick={() => setActiveView("board")}
+                isActive={activeView === "board"}
+              >
+                Board View
+              </DropdownItem>
+            </DropdownContent>
+          </DropdownMenu>
+
+          <DropdownMenu>
+            <DropdownTrigger>
+              <Button variant="select">Theme</Button>
+            </DropdownTrigger>
+            <DropdownContent>
+              <DropdownItem
+                onClick={() => setSelectedTheme("light")}
+                isActive={selectedTheme === "light"}
+              >
+                Light
+              </DropdownItem>
+              <DropdownItem
+                onClick={() => setSelectedTheme("dark")}
+                isActive={selectedTheme === "dark"}
+              >
+                Dark
+              </DropdownItem>
+              <DropdownItem
+                onClick={() => setSelectedTheme("system")}
+                isActive={selectedTheme === "system"}
+              >
+                System
               </DropdownItem>
             </DropdownContent>
           </DropdownMenu>
