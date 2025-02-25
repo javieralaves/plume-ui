@@ -56,16 +56,6 @@ interface DialogProps {
 }
 
 /**
- * Header section of the dialog
- */
-interface DialogHeaderProps {
-  /** Header content */
-  children: ReactNode;
-  /** Additional CSS classes */
-  className?: string;
-}
-
-/**
  * Main content section of the dialog
  */
 interface DialogContentProps {

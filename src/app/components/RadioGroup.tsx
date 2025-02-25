@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useId, ReactNode } from "react";
+import { createContext, useContext, ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
 type RadioSize = "sm" | "md" | "lg";

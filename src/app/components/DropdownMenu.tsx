@@ -8,7 +8,6 @@ import {
   useState,
   createContext,
   useContext,
-  ButtonHTMLAttributes,
 } from "react";
 import React from "react";
 
@@ -124,11 +123,7 @@ export function DropdownMenu({ children, className }: DropdownMenuProps) {
   );
 }
 
-export function DropdownTrigger({
-  children,
-  className,
-  ...props
-}: DropdownTriggerProps) {
+export function DropdownTrigger({ children, className }: DropdownTriggerProps) {
   const { isOpen, setIsOpen } = useDropdown();
 
   return React.cloneElement(children, {

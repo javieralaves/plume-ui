@@ -39,12 +39,6 @@ interface TextareaProps
   label?: string;
   /** Error message to display */
   error?: string;
-  /** Whether the textarea should auto-resize based on content */
-  autoResize?: boolean;
-  /** Minimum number of rows when auto-resizing */
-  minRows?: number;
-  /** Maximum number of rows when auto-resizing */
-  maxRows?: number;
   size?: TextareaSize;
 }
 
@@ -55,20 +49,7 @@ const sizeClasses = {
 } as const;
 
 export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
-  (
-    {
-      className,
-      label,
-      error,
-      size = "md",
-      disabled,
-      autoResize,
-      minRows,
-      maxRows,
-      ...props
-    },
-    ref
-  ) => {
+  ({ className, label, error, size = "md", disabled, ...props }, ref) => {
     return (
       <div className="w-full">
         {label && (

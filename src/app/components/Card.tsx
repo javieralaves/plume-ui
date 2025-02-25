@@ -122,7 +122,7 @@ export function Card({
   image,
   interactive = false,
 }: CardProps) {
-  const isClickable = variant === "interactive" || onClick;
+  const isClickable = variant === "interactive" || onClick || interactive;
 
   return (
     <div
@@ -135,7 +135,8 @@ export function Card({
         variant === "form" ? "p-6" : compact ? "p-3" : "p-4",
 
         // Variant-specific styles
-        variant === "interactive" && "cursor-pointer hover:bg-neutral-50",
+        (variant === "interactive" || interactive) &&
+          "cursor-pointer hover:bg-neutral-50",
         variant === "form" && "shadow-sm space-y-4 form",
         isClickable && "hover:shadow-md",
 

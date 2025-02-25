@@ -4,11 +4,8 @@ import {
   createContext,
   useContext,
   useId,
-  useRef,
-  KeyboardEvent,
-  ReactNode,
   Children,
-  ReactElement,
+  ReactNode,
   isValidElement,
   cloneElement,
 } from "react";
@@ -178,6 +175,7 @@ export function TabList({ className, children }: TabsListProps) {
         "flex gap-1",
         fullWidth && "w-full",
         variant === "modern" && "rounded-lg bg-gray-100 p-1",
+        sizeClasses[size].tab,
         className
       )}
       aria-orientation="horizontal"

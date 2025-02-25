@@ -260,6 +260,7 @@ export function Slider({
       )}
       style={{ left: `${getPercentage(value)}%` }}
       onMouseDown={() => handleThumbMouseDown(type)}
+      onKeyDown={(e) => handleKeyDown(e, type)}
     />
   );
 
