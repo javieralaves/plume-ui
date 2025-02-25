@@ -36,6 +36,12 @@ import {
   CardStat,
 } from "./components/Card";
 import { BarChart3, Info, ArrowRight } from "lucide-react";
+import {
+  Dialog,
+  DialogTitle,
+  DialogBody,
+  DialogFooter,
+} from "./components/Dialog";
 
 export default function Home() {
   const [switches, setSwitches] = useState({
@@ -89,6 +95,12 @@ export default function Home() {
     basic: "",
   });
 
+  const [dialogs, setDialogs] = useState({
+    basic: false,
+    confirmation: false,
+    scrollable: false,
+  });
+
   const handleSwitchChange =
     (key: keyof typeof switches) => (checked: boolean) => {
       setSwitches((prev) => ({ ...prev, [key]: checked }));
@@ -138,6 +150,14 @@ export default function Home() {
 
   const handleCardClick = () => {
     console.log("Card clicked");
+  };
+
+  const openDialog = (key: keyof typeof dialogs) => {
+    setDialogs((prev) => ({ ...prev, [key]: true }));
+  };
+
+  const closeDialog = (key: keyof typeof dialogs) => {
+    setDialogs((prev) => ({ ...prev, [key]: false }));
   };
 
   return (
@@ -1472,6 +1492,121 @@ export default function Home() {
                     A compact card with reduced padding for dense layouts.
                   </CardBody>
                 </Card>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Dialog Component Demo */}
+        <section>
+          <h2 className="app-h2 mb-8">Dialog Component</h2>
+          <div className="space-y-8">
+            {/* Basic Dialog */}
+            <div className="space-y-2">
+              <h3 className="app-h3 text-text-secondary">Basic Dialog</h3>
+              <div>
+                <Button onClick={() => openDialog("basic")}>Open Dialog</Button>
+                <Dialog
+                  isOpen={dialogs.basic}
+                  onClose={() => closeDialog("basic")}
+                >
+                  <DialogTitle>Dialog Title</DialogTitle>
+                  <DialogBody>
+                    This is a basic dialog with a title and some content. You
+                    can close it by clicking the X button, clicking outside, or
+                    pressing the Escape key.
+                  </DialogBody>
+                  <DialogFooter>
+                    <Button
+                      variant="secondary"
+                      onClick={() => closeDialog("basic")}
+                    >
+                      Close
+                    </Button>
+                  </DialogFooter>
+                </Dialog>
+              </div>
+            </div>
+
+            {/* Confirmation Dialog */}
+            <div className="space-y-2">
+              <h3 className="app-h3 text-text-secondary">
+                Confirmation Dialog
+              </h3>
+              <div>
+                <Button onClick={() => openDialog("confirmation")}>
+                  Delete Item
+                </Button>
+                <Dialog
+                  isOpen={dialogs.confirmation}
+                  onClose={() => closeDialog("confirmation")}
+                >
+                  <DialogTitle>Confirm Deletion</DialogTitle>
+                  <DialogBody>
+                    Are you sure you want to delete this item? This action
+                    cannot be undone.
+                  </DialogBody>
+                  <DialogFooter>
+                    <Button
+                      variant="secondary"
+                      onClick={() => closeDialog("confirmation")}
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      variant="primary"
+                      onClick={() => {
+                        console.log("Item deleted");
+                        closeDialog("confirmation");
+                      }}
+                    >
+                      Delete
+                    </Button>
+                  </DialogFooter>
+                </Dialog>
+              </div>
+            </div>
+
+            {/* Scrollable Dialog */}
+            <div className="space-y-2">
+              <h3 className="app-h3 text-text-secondary">Scrollable Dialog</h3>
+              <div>
+                <Button onClick={() => openDialog("scrollable")}>
+                  Open Long Content
+                </Button>
+                <Dialog
+                  isOpen={dialogs.scrollable}
+                  onClose={() => closeDialog("scrollable")}
+                >
+                  <DialogTitle>Terms of Service</DialogTitle>
+                  <DialogBody>
+                    {Array.from({ length: 15 }, (_, i) => (
+                      <p key={i} className="mb-4">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                        Sed do eiusmod tempor incididunt ut labore et dolore
+                        magna aliqua. Ut enim ad minim veniam, quis nostrud
+                        exercitation ullamco laboris nisi ut aliquip ex ea
+                        commodo consequat.
+                      </p>
+                    ))}
+                  </DialogBody>
+                  <DialogFooter>
+                    <Button
+                      variant="secondary"
+                      onClick={() => closeDialog("scrollable")}
+                    >
+                      Close
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        console.log("Terms accepted");
+                        closeDialog("scrollable");
+                      }}
+                    >
+                      Accept
+                    </Button>
+                  </DialogFooter>
+                </Dialog>
               </div>
             </div>
           </div>
