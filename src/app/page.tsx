@@ -18,6 +18,7 @@ import { SliderDemo } from "./demos/slider-demo";
 import { DataTableDemo } from "./demos/data-table-demo";
 import { ToastDemo } from "./demos/toast-demo";
 import { ToastProvider } from "./components/Toast";
+import { WalletConnectionDemo } from "./demos/wallet-connection-demo";
 
 export default function Home() {
   return (
@@ -240,6 +241,7 @@ export default function Home() {
           </section>
 
           {/* Component Demos */}
+          <WalletConnectionDemo />
           <ButtonDemo />
           <SwitchDemo />
           <CheckboxDemo />
