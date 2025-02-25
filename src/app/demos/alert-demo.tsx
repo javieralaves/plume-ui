@@ -1,7 +1,6 @@
 "use client";
 
 import { Alert } from "../components/Alert";
-import { AlertCircle, AlertTriangle, CheckCircle2, Info } from "lucide-react";
 
 export function AlertDemo() {
   return (

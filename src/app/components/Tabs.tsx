@@ -7,6 +7,10 @@ import {
   useRef,
   KeyboardEvent,
   ReactNode,
+  Children,
+  ReactElement,
+  isValidElement,
+  cloneElement,
 } from "react";
 import { cn } from "@/lib/utils";
 
@@ -49,7 +53,7 @@ interface TabsListProps {
 /**
  * Individual tab trigger button
  */
-interface TabsTriggerProps {
+interface TabProps {
   /** Value associated with this tab */
   value: string;
   /** Tab label */
@@ -58,31 +62,22 @@ interface TabsTriggerProps {
   disabled?: boolean;
   /** Additional CSS classes */
   className?: string;
+  /** ID for accessibility */
+  id?: string;
+  /** ARIA controls attribute */
+  "aria-controls"?: string;
 }
 
 /**
  * Content panel associated with a tab
  */
-interface TabsContentProps {
+interface TabPanelProps {
   /** Value that matches the associated tab trigger */
   value: string;
   /** Panel content */
   children: ReactNode;
   /** Additional CSS classes */
   className?: string;
-}
-
-interface TabProps {
-  value: string;
-  disabled?: boolean;
-  className?: string;
-  children: ReactNode;
-}
-
-interface TabPanelProps {
-  value: string;
-  className?: string;
-  children: ReactNode;
 }
 
 interface TabsContextValue {
@@ -96,6 +91,14 @@ interface TabsContextValue {
 }
 
 const TabsContext = createContext<TabsContextValue | null>(null);
+
+function useTabsContext() {
+  const context = useContext(TabsContext);
+  if (!context) {
+    throw new Error("Tabs components must be used within a Tabs provider");
+  }
+  return context;
+}
 
 const sizeClasses: Record<TabSize, { tab: string; border: string }> = {
   sm: {
@@ -165,60 +168,34 @@ export function Tabs({
 }
 
 export function TabList({ className, children }: TabsListProps) {
-  const context = useContext(TabsContext);
-  if (!context) throw new Error("TabList must be used within Tabs");
-
-  const { variant, hugContent, fullWidth } = context;
-  const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
-
-  const handleKeyDown = (
-    event: KeyboardEvent<HTMLDivElement>,
-    index: number
-  ) => {
-    const tabCount = tabRefs.current.length;
-    let nextIndex = index;
-
-    switch (event.key) {
-      case "ArrowLeft":
-        nextIndex = (index - 1 + tabCount) % tabCount;
-        break;
-      case "ArrowRight":
-        nextIndex = (index + 1) % tabCount;
-        break;
-      default:
-        return;
-    }
-
-    tabRefs.current[nextIndex]?.focus();
-  };
+  const { baseId, size, variant, fullWidth } = useTabsContext();
+  const childArray = Children.toArray(children);
 
   return (
-    <nav
+    <div
       role="tablist"
       className={cn(
-        "flex",
-        hugContent && "inline-flex",
+        "flex gap-1",
         fullWidth && "w-full",
-        variantClasses[variant].list,
+        variant === "modern" && "rounded-lg bg-gray-100 p-1",
         className
       )}
+      aria-orientation="horizontal"
     >
-      {Array.isArray(children)
-        ? children.map((child, index) => (
-            <div
-              key={index}
-              onKeyDown={(e) => handleKeyDown(e, index)}
-              className={cn(fullWidth && "flex-1")}
-              ref={(el) => {
-                const button = el?.querySelector("button");
-                if (button) tabRefs.current[index] = button;
-              }}
-            >
-              {child}
-            </div>
-          ))
-        : children}
-    </nav>
+      {Children.map(children, (child) => {
+        if (!isValidElement<TabProps>(child)) return null;
+        const index = childArray.indexOf(child);
+        return cloneElement(child, {
+          id: `${baseId}-tab-${index}`,
+          "aria-controls": `${baseId}-panel-${index}`,
+          className: cn(
+            "flex-1",
+            variant === "modern" && index > 0 && "ml-0",
+            child.props.className
+          ),
+        });
+      })}
+    </div>
   );
 }
 

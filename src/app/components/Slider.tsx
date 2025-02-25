@@ -216,7 +216,7 @@ export function Slider({
       case "Home":
         event.preventDefault();
         if (Array.isArray(internalValue)) {
-          const [_, end] = internalValue;
+          const [, end] = internalValue;
           newValue = thumb === "start" ? [min, end] : [min, min];
         } else {
           newValue = min;
@@ -226,7 +226,7 @@ export function Slider({
       case "End":
         event.preventDefault();
         if (Array.isArray(internalValue)) {
-          const [start, _] = internalValue;
+          const [start] = internalValue;
           newValue = thumb === "start" ? [max, max] : [start, max];
         } else {
           newValue = max;

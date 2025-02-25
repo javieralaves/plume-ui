@@ -1,7 +1,7 @@
 "use client";
 
 import { Badge } from "../components/Badge";
-import { X, CheckCircle2, AlertTriangle, AlertCircle } from "lucide-react";
+import { CheckCircle2, AlertTriangle, AlertCircle } from "lucide-react";
 
 export function BadgeDemo() {
   return (
