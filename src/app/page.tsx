@@ -45,6 +45,7 @@ import {
 import { Accordion, AccordionItem } from "./components/Accordion";
 import { Slider } from "./components/Slider";
 import { ToastProvider, useToast } from "./components/Toast";
+import { DataTable } from "./components/DataTable/DataTable";
 
 export default function Home() {
   const [switches, setSwitches] = useState({
@@ -1827,6 +1828,261 @@ export default function Home() {
 
           {/* Toast Component Demo */}
           <ToastDemo />
+
+          {/* DataTable Component Demo */}
+          <section>
+            <h2 className="app-h2 mb-8">DataTable Component</h2>
+            <div className="space-y-8">
+              {/* Basic Table */}
+              <div className="space-y-2">
+                <h3 className="app-h3 text-text-secondary">Basic Table</h3>
+                <DataTable
+                  data={[
+                    {
+                      id: 1,
+                      name: "John Doe",
+                      email: "john@example.com",
+                      role: "Admin",
+                    },
+                    {
+                      id: 2,
+                      name: "Jane Smith",
+                      email: "jane@example.com",
+                      role: "User",
+                    },
+                    {
+                      id: 3,
+                      name: "Bob Johnson",
+                      email: "bob@example.com",
+                      role: "Editor",
+                    },
+                    {
+                      id: 4,
+                      name: "Alice Brown",
+                      email: "alice@example.com",
+                      role: "User",
+                    },
+                    {
+                      id: 5,
+                      name: "Charlie Wilson",
+                      email: "charlie@example.com",
+                      role: "Admin",
+                    },
+                  ]}
+                  columns={[
+                    { key: "name", header: "Name", sortable: true },
+                    { key: "email", header: "Email" },
+                    { key: "role", header: "Role" },
+                  ]}
+                  keyField="id"
+                />
+              </div>
+
+              {/* Selectable Table */}
+              <div className="space-y-2">
+                <h3 className="app-h3 text-text-secondary">Selectable Table</h3>
+                <DataTable
+                  data={[
+                    {
+                      id: 1,
+                      task: "Complete project",
+                      status: "In Progress",
+                      dueDate: "2024-03-15",
+                    },
+                    {
+                      id: 2,
+                      task: "Review code",
+                      status: "Pending",
+                      dueDate: "2024-03-16",
+                    },
+                    {
+                      id: 3,
+                      task: "Write documentation",
+                      status: "Completed",
+                      dueDate: "2024-03-14",
+                    },
+                    {
+                      id: 4,
+                      task: "Test features",
+                      status: "In Progress",
+                      dueDate: "2024-03-17",
+                    },
+                    {
+                      id: 5,
+                      task: "Deploy updates",
+                      status: "Pending",
+                      dueDate: "2024-03-18",
+                    },
+                  ]}
+                  columns={[
+                    { key: "task", header: "Task", sortable: true },
+                    { key: "status", header: "Status" },
+                    { key: "dueDate", header: "Due Date", sortable: true },
+                  ]}
+                  keyField="id"
+                  selectable
+                  onSelectionChange={(selectedRows) =>
+                    console.log("Selected:", selectedRows)
+                  }
+                />
+              </div>
+
+              {/* Expandable Table */}
+              <div className="space-y-2">
+                <h3 className="app-h3 text-text-secondary">Expandable Table</h3>
+                <DataTable
+                  data={[
+                    {
+                      id: 1,
+                      product: "Laptop Pro",
+                      price: 1299,
+                      stock: 45,
+                      description:
+                        "High-performance laptop with 16GB RAM and 512GB SSD",
+                    },
+                    {
+                      id: 2,
+                      product: "Wireless Mouse",
+                      price: 49,
+                      stock: 120,
+                      description:
+                        "Ergonomic wireless mouse with long battery life",
+                    },
+                    {
+                      id: 3,
+                      product: "4K Monitor",
+                      price: 699,
+                      stock: 30,
+                      description: "32-inch 4K monitor with HDR support",
+                    },
+                  ]}
+                  columns={[
+                    { key: "product", header: "Product", sortable: true },
+                    {
+                      key: "price",
+                      header: "Price",
+                      sortable: true,
+                      render: (value) => `$${value.toLocaleString()}`,
+                    },
+                    { key: "stock", header: "Stock", sortable: true },
+                  ]}
+                  keyField="id"
+                  expandable
+                  renderExpandedRow={(row) => (
+                    <div className="text-app-body-sm text-text-secondary">
+                      <strong>Description:</strong> {row.description}
+                    </div>
+                  )}
+                />
+              </div>
+
+              {/* Full-Featured Table */}
+              <div className="space-y-2">
+                <h3 className="app-h3 text-text-secondary">
+                  Full-Featured Table
+                </h3>
+                <DataTable
+                  data={[
+                    {
+                      id: 1,
+                      name: "Project Alpha",
+                      status: "Active",
+                      members: 5,
+                      progress: 75,
+                    },
+                    {
+                      id: 2,
+                      name: "Project Beta",
+                      status: "On Hold",
+                      members: 3,
+                      progress: 45,
+                    },
+                    {
+                      id: 3,
+                      name: "Project Gamma",
+                      status: "Completed",
+                      members: 4,
+                      progress: 100,
+                    },
+                    {
+                      id: 4,
+                      name: "Project Delta",
+                      status: "Active",
+                      members: 6,
+                      progress: 60,
+                    },
+                    {
+                      id: 5,
+                      name: "Project Epsilon",
+                      status: "On Hold",
+                      members: 2,
+                      progress: 30,
+                    },
+                  ]}
+                  columns={[
+                    { key: "name", header: "Project Name", sortable: true },
+                    { key: "status", header: "Status", sortable: true },
+                    { key: "members", header: "Team Size", sortable: true },
+                    {
+                      key: "progress",
+                      header: "Progress",
+                      sortable: true,
+                      render: (value) => (
+                        <div className="flex items-center gap-2">
+                          <div className="w-24 h-2 bg-neutral-200 rounded-full overflow-hidden">
+                            <div
+                              className="h-full bg-primary rounded-full"
+                              style={{ width: `${value}%` }}
+                            />
+                          </div>
+                          <span>{value}%</span>
+                        </div>
+                      ),
+                    },
+                  ]}
+                  keyField="id"
+                  alternateRowBackground
+                  selectable
+                  expandable
+                  renderExpandedRow={(row) => (
+                    <div className="space-y-2">
+                      <div className="text-app-body-sm">
+                        <strong>Project Details:</strong> Lorem ipsum dolor sit
+                        amet, consectetur adipiscing elit.
+                      </div>
+                      <div className="flex gap-2">
+                        <Button size="sm" variant="secondary">
+                          View Details
+                        </Button>
+                        <Button size="sm">Edit Project</Button>
+                      </div>
+                    </div>
+                  )}
+                  onSelectionChange={(selectedRows) =>
+                    console.log("Selected:", selectedRows)
+                  }
+                  onRowClick={(row) => console.log("Clicked:", row)}
+                />
+              </div>
+
+              {/* Features Description */}
+              <div className="space-y-2">
+                <h3 className="app-h3 text-text-secondary">Features</h3>
+                <ul className="list-disc list-inside space-y-2 text-app-body-sm">
+                  <li>
+                    Sortable columns with ascending/descending/none states
+                  </li>
+                  <li>Row selection with checkboxes and bulk selection</li>
+                  <li>Expandable rows with custom content</li>
+                  <li>Pagination with Previous/Next navigation</li>
+                  <li>Alternating row backgrounds (optional)</li>
+                  <li>Custom cell rendering</li>
+                  <li>Responsive design with horizontal scrolling</li>
+                  <li>Fully typed with TypeScript</li>
+                </ul>
+              </div>
+            </div>
+          </section>
         </main>
       </div>
     </ToastProvider>
