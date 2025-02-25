@@ -1,7 +1,9 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useRef, useCallback } from "react";
 import { cn } from "@/lib/utils";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { Checkbox } from "./Checkbox";
+import { motion, AnimatePresence } from "framer-motion";
+import { useInView } from "react-intersection-observer";
 
 /**
  * Sort direction type for table columns
@@ -20,6 +22,8 @@ export interface Column<T> {
   sortable?: boolean;
   /** Custom render function for cell content */
   render?: (value: unknown, row: T) => React.ReactNode;
+  /** Default sort direction for this column */
+  defaultSort?: SortDirection;
 }
 
 /**
@@ -86,6 +90,21 @@ export interface DataTableProps<T> {
   onRowClick?: (row: T) => void;
   /** Callback fired when row selection changes */
   onSelectionChange?: (selectedRows: T[]) => void;
+  /** Render function for row actions */
+  actions?: (row: T) => React.ReactNode;
+  /** Default sort configuration */
+  defaultSort?: {
+    key: string;
+    direction: SortDirection;
+  };
+  /** Enable infinite scroll */
+  infiniteScroll?: boolean;
+  /** Callback to load more data when scrolling */
+  onLoadMore?: () => void;
+  /** Whether there is more data to load */
+  hasMore?: boolean;
+  /** Loading state for infinite scroll */
+  isLoading?: boolean;
 }
 
 /**
@@ -109,15 +128,32 @@ export function DataTable<T>({
   renderExpandedRow,
   onRowClick,
   onSelectionChange,
+  actions,
+  defaultSort,
+  infiniteScroll = false,
+  onLoadMore,
+  hasMore = false,
+  isLoading = false,
 }: DataTableProps<T>) {
   // State management
   const [currentPage, setCurrentPage] = useState(1);
   const [sortConfig, setSortConfig] = useState<{
     key: string;
     direction: SortDirection;
-  }>({ key: "", direction: null });
+  }>(defaultSort || { key: "", direction: null });
   const [selectedRows, setSelectedRows] = useState<Set<string>>(new Set());
   const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set());
+
+  // Infinite scroll setup
+  const { ref: loadMoreRef } = useInView({
+    threshold: 0.5,
+    triggerOnce: false,
+  });
+
+  // Remove automatic loading on scroll
+  React.useEffect(() => {
+    // Removed automatic loading effect
+  }, []);
 
   // Calculate total pages
   const totalPages = Math.ceil(data.length / pageSize);
@@ -141,23 +177,27 @@ export function DataTable<T>({
     }
 
     // Apply pagination
-    const start = (currentPage - 1) * pageSize;
-    return processedData.slice(start, start + pageSize);
-  }, [data, sortConfig, currentPage, pageSize]);
+    if (!infiniteScroll) {
+      const start = (currentPage - 1) * pageSize;
+      return processedData.slice(start, start + pageSize);
+    }
+
+    return processedData;
+  }, [data, sortConfig, currentPage, pageSize, infiniteScroll]);
 
   // Handle sort
   const handleSort = (key: string) => {
-    setSortConfig((prev) => ({
-      key,
-      direction:
-        prev.key === key
-          ? prev.direction === "asc"
-            ? "desc"
-            : prev.direction === "desc"
-            ? null
-            : "asc"
-          : "asc",
-    }));
+    setSortConfig((prev) => {
+      if (prev.key === key) {
+        // If already sorting by this column, cycle through states
+        if (prev.direction === "asc") return { key, direction: "desc" };
+        if (prev.direction === "desc") return { key: "", direction: null };
+        return { key, direction: "asc" };
+      }
+      // If sorting by a new column, use its default direction or "asc"
+      const column = columns.find((col) => col.key === key);
+      return { key, direction: column?.defaultSort || "asc" };
+    });
   };
 
   // Handle selection
@@ -269,6 +309,11 @@ export function DataTable<T>({
                   </div>
                 </th>
               ))}
+              {actions && (
+                <th className="px-4 py-3 text-right text-app-body-sm font-medium text-text-secondary">
+                  Actions
+                </th>
+              )}
             </tr>
           </thead>
           <tbody>
@@ -313,16 +358,40 @@ export function DataTable<T>({
                           : String(row[column.key as keyof T])}
                       </td>
                     ))}
-                  </tr>
-                  {expandable && isExpanded && renderExpandedRow && (
-                    <tr className="bg-surface-secondary">
+                    {actions && (
                       <td
-                        colSpan={columns.length + (selectable ? 1 : 0)}
-                        className="px-4 py-3"
+                        className="px-4 py-3 text-right"
+                        onClick={(e) => e.stopPropagation()}
                       >
-                        {renderExpandedRow(row)}
+                        {actions(row)}
                       </td>
-                    </tr>
+                    )}
+                  </tr>
+                  {expandable && renderExpandedRow && (
+                    <AnimatePresence initial={false} mode="sync">
+                      {isExpanded && (
+                        <tr className="bg-surface-secondary">
+                          <td
+                            colSpan={
+                              columns.length +
+                              (selectable ? 1 : 0) +
+                              (actions ? 1 : 0)
+                            }
+                            className="px-4"
+                          >
+                            <motion.div
+                              initial={{ height: 0, opacity: 0 }}
+                              animate={{ height: "auto", opacity: 1 }}
+                              exit={{ height: 0, opacity: 0 }}
+                              transition={{ duration: 0.2 }}
+                              className="overflow-hidden py-3"
+                            >
+                              {renderExpandedRow(row)}
+                            </motion.div>
+                          </td>
+                        </tr>
+                      )}
+                    </AnimatePresence>
                   )}
                 </React.Fragment>
               );
@@ -331,36 +400,57 @@ export function DataTable<T>({
         </table>
       </div>
 
-      {totalPages > 1 && (
-        <div className="flex items-center justify-between px-4 py-3 border-t border-border-light">
-          <div className="text-sm text-text-secondary">
-            Page {currentPage} of {totalPages}
-          </div>
-          <div className="flex gap-2">
+      {infiniteScroll ? (
+        <div
+          ref={loadMoreRef}
+          className={cn(
+            "flex items-center justify-center p-4 border-t border-border-light",
+            !hasMore && "hidden"
+          )}
+        >
+          {isLoading ? (
+            <div className="text-sm text-text-secondary">Loading more...</div>
+          ) : hasMore ? (
             <button
-              onClick={handlePreviousPage}
-              disabled={currentPage === 1}
-              className={cn(
-                "px-3 py-1.5 text-sm font-medium rounded-md border border-border-light",
-                "bg-white text-text-primary hover:bg-neutral-50 disabled:opacity-50",
-                "disabled:cursor-not-allowed transition-colors"
-              )}
+              onClick={() => onLoadMore?.()}
+              className="px-3 py-1.5 text-sm font-medium rounded-md border border-border-light bg-white hover:bg-neutral-50 transition-colors"
             >
-              Previous
+              Load more rows
             </button>
-            <button
-              onClick={handleNextPage}
-              disabled={currentPage === totalPages}
-              className={cn(
-                "px-3 py-1.5 text-sm font-medium rounded-md border border-border-light",
-                "bg-white text-text-primary hover:bg-neutral-50 disabled:opacity-50",
-                "disabled:cursor-not-allowed transition-colors"
-              )}
-            >
-              Next
-            </button>
-          </div>
+          ) : null}
         </div>
+      ) : (
+        totalPages > 1 && (
+          <div className="flex items-center justify-between px-4 py-3 border-t border-border-light">
+            <div className="text-sm text-text-secondary">
+              Page {currentPage} of {totalPages}
+            </div>
+            <div className="flex gap-2">
+              <button
+                onClick={handlePreviousPage}
+                disabled={currentPage === 1}
+                className={cn(
+                  "px-3 py-1.5 text-sm font-medium rounded-md border border-border-light",
+                  "bg-white text-text-primary hover:bg-neutral-50 disabled:opacity-50",
+                  "disabled:cursor-not-allowed transition-colors"
+                )}
+              >
+                Previous
+              </button>
+              <button
+                onClick={handleNextPage}
+                disabled={currentPage === totalPages}
+                className={cn(
+                  "px-3 py-1.5 text-sm font-medium rounded-md border border-border-light",
+                  "bg-white text-text-primary hover:bg-neutral-50 disabled:opacity-50",
+                  "disabled:cursor-not-allowed transition-colors"
+                )}
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        )
       )}
     </div>
   );
