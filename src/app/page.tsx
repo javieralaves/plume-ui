@@ -1970,14 +1970,11 @@ export default function Home() {
                   ]}
                   keyField="id"
                   expandable
-                  renderExpandedRow={
-                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                    (row) => (
-                      <div className="text-app-body-sm text-text-secondary">
-                        <strong>Description:</strong> {row.description}
-                      </div>
-                    )
-                  }
+                  renderExpandedRow={(row) => (
+                    <div className="text-app-body-sm text-text-secondary">
+                      <strong>Description:</strong> {row.description}
+                    </div>
+                  )}
                 />
               </div>
 
@@ -2049,20 +2046,23 @@ export default function Home() {
                   alternateRowBackground
                   selectable
                   expandable
-                  renderExpandedRow={(row) => (
-                    <div className="space-y-2">
-                      <div className="text-app-body-sm">
-                        <strong>Project Details:</strong> Lorem ipsum dolor sit
-                        amet, consectetur adipiscing elit.
+                  renderExpandedRow={
+                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                    (row) => (
+                      <div className="space-y-2">
+                        <div className="text-app-body-sm">
+                          <strong>Project Details:</strong> Lorem ipsum dolor
+                          sit amet, consectetur adipiscing elit.
+                        </div>
+                        <div className="flex gap-2">
+                          <Button size="sm" variant="secondary">
+                            View Details
+                          </Button>
+                          <Button size="sm">Edit Project</Button>
+                        </div>
                       </div>
-                      <div className="flex gap-2">
-                        <Button size="sm" variant="secondary">
-                          View Details
-                        </Button>
-                        <Button size="sm">Edit Project</Button>
-                      </div>
-                    </div>
-                  )}
+                    )
+                  }
                   onSelectionChange={(selectedRows) =>
                     console.log("Selected:", selectedRows)
                   }
