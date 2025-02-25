@@ -1,31 +1,85 @@
+"use client";
+
 import { cn } from "@/lib/utils";
 import { ReactNode } from "react";
 import Image from "next/image";
 
 type CardVariant = "default" | "info" | "statistic" | "interactive" | "form";
 
+/**
+ * A versatile card component that provides a container for content with optional header and footer sections.
+ * Supports hover effects and can be made interactive.
+ *
+ * @example
+ * ```tsx
+ * // Basic usage
+ * <Card>
+ *   <CardHeader>
+ *     <CardTitle>Card Title</CardTitle>
+ *     <CardDescription>Optional description</CardDescription>
+ *   </CardHeader>
+ *   <CardContent>
+ *     Main content goes here
+ *   </CardContent>
+ *   <CardFooter>
+ *     Footer content
+ *   </CardFooter>
+ * </Card>
+ *
+ * // Interactive card with hover effect
+ * <Card interactive>
+ *   <CardContent>
+ *     Clickable card content
+ *   </CardContent>
+ * </Card>
+ * ```
+ */
 interface CardProps {
+  /** Card content */
   children: ReactNode;
+  /** Additional CSS classes */
   className?: string;
+  /** Whether the card should show hover effects and be interactive */
+  interactive?: boolean;
+  /** Card variant */
   variant?: CardVariant;
+  /** Card click handler */
   onClick?: () => void;
+  /** Whether the card should be compact */
   compact?: boolean;
+  /** Card image */
   image?: string;
 }
 
+/**
+ * Header section of the card
+ */
 interface CardHeaderProps {
+  /** Header content */
   children: ReactNode;
+  /** Additional CSS classes */
   className?: string;
+  /** Card icon */
   icon?: ReactNode;
 }
 
+/**
+ * Main content section of the card
+ */
 interface CardBodyProps {
+  /** Main content */
   children: ReactNode;
+  /** Additional CSS classes */
   className?: string;
 }
 
+/**
+ * Footer section of the card
+ */
 interface CardFooterProps {
+  /** Footer content */
   children: ReactNode;
+  /** Additional CSS classes */
   className?: string;
 }
 
@@ -39,6 +93,26 @@ interface CardStatProps {
   className?: string;
 }
 
+/**
+ * Title component for the card header
+ */
+interface CardTitleProps {
+  /** Title content */
+  children: ReactNode;
+  /** Additional CSS classes */
+  className?: string;
+}
+
+/**
+ * Description component for the card header
+ */
+interface CardDescriptionProps {
+  /** Description content */
+  children: ReactNode;
+  /** Additional CSS classes */
+  className?: string;
+}
+
 export function Card({
   children,
   className,
@@ -46,6 +120,7 @@ export function Card({
   onClick,
   compact = false,
   image,
+  interactive = false,
 }: CardProps) {
   const isClickable = variant === "interactive" || onClick;
 

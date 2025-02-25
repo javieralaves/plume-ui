@@ -1,12 +1,50 @@
+"use client";
+
 import { cn } from "@/lib/utils";
 import { TextareaHTMLAttributes, forwardRef } from "react";
 
 type TextareaSize = "sm" | "md" | "lg";
 
+/**
+ * A textarea component that extends the native textarea with additional styling and features.
+ * Supports error states, disabled state, and auto-resizing.
+ *
+ * @example
+ * ```tsx
+ * // Basic usage
+ * <Textarea
+ *   placeholder="Enter your message"
+ *   onChange={handleChange}
+ * />
+ *
+ * // With error state
+ * <Textarea
+ *   value={message}
+ *   onChange={handleChange}
+ *   error="Message is required"
+ * />
+ *
+ * // Auto-resizing
+ * <Textarea
+ *   value={content}
+ *   onChange={handleChange}
+ *   autoResize
+ *   minRows={3}
+ *   maxRows={10}
+ * />
+ * ```
+ */
 interface TextareaProps
   extends Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, "size"> {
   label?: string;
+  /** Error message to display */
   error?: string;
+  /** Whether the textarea should auto-resize based on content */
+  autoResize?: boolean;
+  /** Minimum number of rows when auto-resizing */
+  minRows?: number;
+  /** Maximum number of rows when auto-resizing */
+  maxRows?: number;
   size?: TextareaSize;
 }
 
@@ -17,7 +55,20 @@ const sizeClasses = {
 } as const;
 
 export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
-  ({ className, label, error, size = "md", disabled, ...props }, ref) => {
+  (
+    {
+      className,
+      label,
+      error,
+      size = "md",
+      disabled,
+      autoResize,
+      minRows,
+      maxRows,
+      ...props
+    },
+    ref
+  ) => {
     return (
       <div className="w-full">
         {label && (

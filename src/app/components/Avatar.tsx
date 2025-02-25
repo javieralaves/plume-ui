@@ -5,13 +5,45 @@ import { User } from "lucide-react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 
-type AvatarSize = "sm" | "md" | "lg";
+/**
+ * Available sizes for the avatar component
+ */
+type AvatarSize = "sm" | "md" | "lg" | "xl";
 
+/**
+ * A versatile avatar component that displays either an image or initials.
+ * Supports different sizes and provides a fallback display when image loading fails.
+ *
+ * @example
+ * ```tsx
+ * // Basic usage with image
+ * <Avatar
+ *   src="/path/to/image.jpg"
+ *   alt="User Name"
+ *   size="md"
+ * />
+ *
+ * // With initials fallback
+ * <Avatar
+ *   initials="JD"
+ *   size="lg"
+ * />
+ *
+ * // Different sizes
+ * <Avatar src="/user1.jpg" size="sm" />
+ * <Avatar src="/user2.jpg" size="xl" />
+ * ```
+ */
 interface AvatarProps {
+  /** URL of the avatar image */
   src?: string;
+  /** Alt text for the image */
   alt?: string;
+  /** Initials to display when no image is available */
   initials?: string;
+  /** Size of the avatar */
   size?: AvatarSize;
+  /** Additional CSS classes */
   className?: string;
 }
 
@@ -27,6 +59,10 @@ const sizeClasses: Record<AvatarSize, { container: string; icon: string }> = {
   lg: {
     container: "w-14 h-14 text-app-body-lg",
     icon: "w-7 h-7",
+  },
+  xl: {
+    container: "w-18 h-18 text-app-body-xl",
+    icon: "w-9 h-9",
   },
 };
 

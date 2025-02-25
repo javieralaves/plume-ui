@@ -19,6 +19,7 @@ export function RadioGroupDemo() {
           <h3 className="app-h3 text-text-secondary">Size Variants</h3>
           <div className="space-y-8">
             <RadioGroup
+              name="size-sm"
               size="sm"
               orientation="horizontal"
               label="Small Radio Group (Horizontal)"
@@ -33,6 +34,7 @@ export function RadioGroupDemo() {
             </RadioGroup>
 
             <RadioGroup
+              name="fruit-md"
               size="md"
               label="Medium Radio Group (Vertical)"
               value={radioValues.fruit}
@@ -46,6 +48,7 @@ export function RadioGroupDemo() {
             </RadioGroup>
 
             <RadioGroup
+              name="fruit-lg"
               size="lg"
               orientation="horizontal"
               label="Large Radio Group (Horizontal)"
@@ -66,6 +69,7 @@ export function RadioGroupDemo() {
           <h3 className="app-h3 text-text-secondary">States</h3>
           <div className="space-y-8">
             <RadioGroup
+              name="disabled-group"
               disabled
               orientation="horizontal"
               label="Disabled Radio Group (Horizontal)"
@@ -80,6 +84,7 @@ export function RadioGroupDemo() {
             </RadioGroup>
 
             <RadioGroup
+              name="mixed-states"
               label="Mixed States (Vertical)"
               value={radioValues.disabled}
               onChange={(value) =>

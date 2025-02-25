@@ -20,34 +20,77 @@ interface AccordionContextValue {
   items: string[];
 }
 
+/**
+ * Type for accordion visual variants
+ */
+type AccordionVariant = "default" | "borderless";
+
+/**
+ * A collapsible content component that can display multiple items.
+ * Supports keyboard navigation and multiple expanded items.
+ *
+ * @example
+ * ```tsx
+ * <Accordion allowMultiple defaultExpanded={["item-1"]}>
+ *   <AccordionItem title="Section 1">
+ *     Content for section 1
+ *   </AccordionItem>
+ *   <AccordionItem title="Section 2">
+ *     Content for section 2
+ *   </AccordionItem>
+ * </Accordion>
+ * ```
+ */
 interface AccordionProps {
+  /** Content of the accordion (AccordionItem components) */
   children: ReactNode;
+  /** Additional CSS classes */
   className?: string;
+  /** Visual style variant */
   variant?: AccordionVariant;
+  /** Whether multiple items can be expanded simultaneously */
   allowMultiple?: boolean;
+  /** Array of item IDs that should be expanded by default */
   defaultExpanded?: string[];
 }
 
+/**
+ * Props for individual accordion items
+ */
 interface AccordionItemProps {
+  /** Content to be displayed when item is expanded */
   children: ReactNode;
+  /** Additional CSS classes */
   className?: string;
+  /** Text displayed in the item header */
   title: string;
 }
 
+/**
+ * Props for the accordion trigger button
+ */
 interface AccordionTriggerProps {
+  /** Content of the trigger (usually the title) */
   children: ReactNode;
+  /** Additional CSS classes */
   className?: string;
+  /** Unique identifier for the item */
   itemId: string;
+  /** Whether the associated item is expanded */
   isExpanded: boolean;
 }
 
+/**
+ * Props for the expandable content section
+ */
 interface AccordionContentProps {
+  /** Content to be displayed when expanded */
   children: ReactNode;
+  /** Additional CSS classes */
   className?: string;
+  /** Unique identifier for the item */
   itemId: string;
 }
-
-type AccordionVariant = "default" | "borderless";
 
 const AccordionContext = createContext<AccordionContextValue | null>(null);
 

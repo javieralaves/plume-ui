@@ -4,13 +4,46 @@ import { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { X, CheckCircle, AlertTriangle, XCircle, Info } from "lucide-react";
 
+/**
+ * Available visual styles for the alert
+ */
 type AlertType = "base" | "success" | "warning" | "error" | "info";
 
+/**
+ * A versatile alert component for displaying messages, notifications, and feedback.
+ * Supports different visual styles and optional dismiss functionality.
+ *
+ * @example
+ * ```tsx
+ * // Basic usage
+ * <Alert type="info" title="Note">
+ *   This is an informational message.
+ * </Alert>
+ *
+ * // With dismiss button
+ * <Alert
+ *   type="success"
+ *   title="Success!"
+ *   onDismiss={() => console.log('Alert dismissed')}
+ * >
+ *   Operation completed successfully.
+ * </Alert>
+ *
+ * // Different types
+ * <Alert type="warning">Warning message</Alert>
+ * <Alert type="error">Error message</Alert>
+ * ```
+ */
 interface AlertProps {
+  /** Visual style variant of the alert */
   type?: AlertType;
+  /** Optional header text */
   title?: string;
+  /** Main content of the alert */
   children: ReactNode;
+  /** Callback fired when the dismiss button is clicked */
   onDismiss?: () => void;
+  /** Additional CSS classes */
   className?: string;
 }
 

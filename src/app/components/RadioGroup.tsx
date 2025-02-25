@@ -1,26 +1,73 @@
 "use client";
 
-import { createContext, useContext, useId } from "react";
+import { createContext, useContext, useId, ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
 type RadioSize = "sm" | "md" | "lg";
 type RadioOrientation = "horizontal" | "vertical";
 
+/**
+ * A group of radio buttons that allows users to select a single option from multiple choices.
+ * Supports horizontal and vertical layouts, disabled state, and custom styling.
+ *
+ * @example
+ * ```tsx
+ * // Basic usage
+ * <RadioGroup
+ *   name="fruits"
+ *   value={selectedFruit}
+ *   onChange={setSelectedFruit}
+ * >
+ *   <RadioOption value="apple">Apple</RadioOption>
+ *   <RadioOption value="banana">Banana</RadioOption>
+ *   <RadioOption value="orange">Orange</RadioOption>
+ * </RadioGroup>
+ *
+ * // Horizontal layout with disabled option
+ * <RadioGroup
+ *   name="size"
+ *   value={selectedSize}
+ *   onChange={setSelectedSize}
+ *   orientation="horizontal"
+ * >
+ *   <RadioOption value="sm">Small</RadioOption>
+ *   <RadioOption value="md">Medium</RadioOption>
+ *   <RadioOption value="lg" disabled>Large</RadioOption>
+ * </RadioGroup>
+ * ```
+ */
 interface RadioGroupProps {
+  /** Name attribute for the radio group */
+  name: string;
+  /** Currently selected value */
   value: string;
+  /** Callback fired when selection changes */
   onChange: (value: string) => void;
-  size?: RadioSize;
+  /** Radio options */
+  children: ReactNode;
+  /** Layout orientation */
   orientation?: RadioOrientation;
+  /** Whether the entire group is disabled */
   disabled?: boolean;
-  label?: string;
+  /** Additional CSS classes */
   className?: string;
-  children: React.ReactNode;
+  /** Size variant of the radio buttons */
+  size?: RadioSize;
+  /** Optional label text for the group */
+  label?: string;
 }
 
+/**
+ * Individual radio option within a RadioGroup
+ */
 interface RadioItemProps {
+  /** Value associated with this option */
   value: string;
+  /** Label text for the option */
   label: string;
+  /** Whether this option is disabled */
   disabled?: boolean;
+  /** Additional CSS classes */
   className?: string;
 }
 
@@ -51,17 +98,16 @@ const sizeClasses: Record<RadioSize, { container: string; circle: string }> = {
 };
 
 export function RadioGroup({
+  name,
   value,
   onChange,
-  size = "md",
+  children,
   orientation = "vertical",
   disabled,
-  label,
   className,
-  children,
+  size = "md",
+  label,
 }: RadioGroupProps) {
-  const name = useId();
-
   return (
     <RadioContext.Provider
       value={{ name, value, onChange, size, orientation, disabled }}
@@ -82,9 +128,8 @@ export function RadioGroup({
         )}
         <div
           className={cn(
-            orientation === "horizontal"
-              ? "flex items-center gap-6"
-              : "flex flex-col gap-3"
+            "flex gap-4",
+            orientation === "vertical" ? "flex-col" : "flex-row"
           )}
         >
           {children}
@@ -97,7 +142,7 @@ export function RadioGroup({
 export function RadioItem({
   value,
   label,
-  disabled: itemDisabled,
+  disabled,
   className,
 }: RadioItemProps) {
   const context = useContext(RadioContext);
@@ -111,7 +156,7 @@ export function RadioItem({
     orientation,
     disabled: groupDisabled,
   } = context;
-  const isDisabled = itemDisabled || groupDisabled;
+  const isDisabled = disabled || groupDisabled;
   const isSelected = value === selectedValue;
 
   return (
@@ -159,3 +204,6 @@ export function RadioItem({
     </label>
   );
 }
+
+// For backward compatibility
+export { RadioItem as RadioOption };

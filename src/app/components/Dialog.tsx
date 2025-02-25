@@ -1,3 +1,5 @@
+"use client";
+
 import { cn } from "@/lib/utils";
 import { X } from "lucide-react";
 import { ReactNode, useEffect, useRef } from "react";
@@ -5,26 +7,91 @@ import { AnimatePresence, motion } from "framer-motion";
 
 type DialogVariant = "default" | "form";
 
+/**
+ * A modal dialog component that provides a focused overlay for important content or actions.
+ * Supports keyboard navigation, focus trapping, and animations.
+ *
+ * @example
+ * ```tsx
+ * // Basic usage
+ * <Dialog
+ *   isOpen={isOpen}
+ *   onClose={() => setIsOpen(false)}
+ * >
+ *   <DialogHeader>
+ *     <DialogTitle>Confirm Action</DialogTitle>
+ *   </DialogHeader>
+ *   <DialogContent>
+ *     Are you sure you want to proceed?
+ *   </DialogContent>
+ *   <DialogFooter>
+ *     <Button onClick={() => setIsOpen(false)}>Cancel</Button>
+ *     <Button variant="primary" onClick={handleConfirm}>Confirm</Button>
+ *   </DialogFooter>
+ * </Dialog>
+ *
+ * // Custom size
+ * <Dialog size="lg" isOpen={isOpen} onClose={handleClose}>
+ *   <DialogContent>Large dialog content</DialogContent>
+ * </Dialog>
+ * ```
+ */
 interface DialogProps {
+  /** Whether the dialog is currently open */
   isOpen: boolean;
+  /** Callback fired when the dialog should close */
   onClose: () => void;
+  /** Dialog content */
   children: ReactNode;
+  /** Size of the dialog */
+  size?: "sm" | "md" | "lg" | "xl" | "full";
+  /** Additional CSS classes for the dialog */
   className?: string;
+  /** Whether to show the close button */
+  showCloseButton?: boolean;
+  /** Whether clicking the overlay should close the dialog */
+  closeOnOverlayClick?: boolean;
+  /** Variant of the dialog */
   variant?: DialogVariant;
 }
 
-interface DialogTitleProps {
+/**
+ * Header section of the dialog
+ */
+interface DialogHeaderProps {
+  /** Header content */
   children: ReactNode;
+  /** Additional CSS classes */
   className?: string;
 }
 
-interface DialogBodyProps {
+/**
+ * Main content section of the dialog
+ */
+interface DialogContentProps {
+  /** Main content */
   children: ReactNode;
+  /** Additional CSS classes */
   className?: string;
 }
 
+/**
+ * Footer section of the dialog
+ */
 interface DialogFooterProps {
+  /** Footer content */
   children: ReactNode;
+  /** Additional CSS classes */
+  className?: string;
+}
+
+/**
+ * Title component for the dialog header
+ */
+interface DialogTitleProps {
+  /** Title content */
+  children: ReactNode;
+  /** Additional CSS classes */
   className?: string;
 }
 
@@ -162,7 +229,7 @@ export function DialogTitle({ children, className }: DialogTitleProps) {
   );
 }
 
-export function DialogBody({ children, className }: DialogBodyProps) {
+export function DialogBody({ children, className }: DialogContentProps) {
   return (
     <div
       className={cn(

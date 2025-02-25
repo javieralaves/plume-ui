@@ -1,33 +1,88 @@
 "use client";
 
-import { createContext, useContext, useId, useRef, KeyboardEvent } from "react";
+import {
+  createContext,
+  useContext,
+  useId,
+  useRef,
+  KeyboardEvent,
+  ReactNode,
+} from "react";
 import { cn } from "@/lib/utils";
 
 type TabSize = "sm" | "md" | "lg";
 type TabVariant = "modern" | "traditional";
 
+/**
+ * A tabbed interface component that organizes content into multiple panels.
+ * Supports keyboard navigation, disabled tabs, and custom styling.
+ */
 interface TabsProps {
+  /** Currently selected tab value */
   value: string;
+  /** Callback fired when selected tab changes */
   onChange: (value: string) => void;
-  size?: TabSize;
-  variant?: TabVariant;
+  /** Tab components */
+  children: ReactNode;
+  /** Additional CSS classes */
   className?: string;
-  children: React.ReactNode;
+  /** Size variant of the tabs */
+  size?: TabSize;
+  /** Visual style variant */
+  variant?: TabVariant;
+  /** Whether content should hug the tabs */
   hugContent?: boolean;
+  /** Whether tabs should take full width */
   fullWidth?: boolean;
+}
+
+/**
+ * Container for tab triggers
+ */
+interface TabsListProps {
+  /** Tab trigger components */
+  children: ReactNode;
+  /** Additional CSS classes */
+  className?: string;
+}
+
+/**
+ * Individual tab trigger button
+ */
+interface TabsTriggerProps {
+  /** Value associated with this tab */
+  value: string;
+  /** Tab label */
+  children: ReactNode;
+  /** Whether this tab is disabled */
+  disabled?: boolean;
+  /** Additional CSS classes */
+  className?: string;
+}
+
+/**
+ * Content panel associated with a tab
+ */
+interface TabsContentProps {
+  /** Value that matches the associated tab trigger */
+  value: string;
+  /** Panel content */
+  children: ReactNode;
+  /** Additional CSS classes */
+  className?: string;
 }
 
 interface TabProps {
   value: string;
   disabled?: boolean;
   className?: string;
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 interface TabPanelProps {
   value: string;
   className?: string;
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 interface TabsContextValue {
@@ -36,8 +91,8 @@ interface TabsContextValue {
   size: TabSize;
   variant: TabVariant;
   baseId: string;
-  hugContent?: boolean;
-  fullWidth?: boolean;
+  hugContent: boolean;
+  fullWidth: boolean;
 }
 
 const TabsContext = createContext<TabsContextValue | null>(null);
@@ -109,13 +164,7 @@ export function Tabs({
   );
 }
 
-export function TabList({
-  className,
-  children,
-}: {
-  className?: string;
-  children: React.ReactNode;
-}) {
+export function TabList({ className, children }: TabsListProps) {
   const context = useContext(TabsContext);
   if (!context) throw new Error("TabList must be used within Tabs");
 
@@ -179,13 +228,13 @@ export function Tab({ value, disabled, className, children }: TabProps) {
 
   const { activeTab, onChange, size, variant, baseId, fullWidth } = context;
   const isSelected = value === activeTab;
-  const id = `${baseId}-tab-${value}`;
-  const panelId = `${baseId}-panel-${value}`;
+  const tabId = baseId + "-tab-" + value;
+  const panelId = baseId + "-panel-" + value;
 
   return (
     <button
       role="tab"
-      id={id}
+      id={tabId}
       aria-selected={isSelected}
       aria-controls={panelId}
       disabled={disabled}
@@ -213,15 +262,15 @@ export function TabPanel({ value, className, children }: TabPanelProps) {
 
   const { activeTab, baseId } = context;
   const isActive = value === activeTab;
-  const id = `${baseId}-panel-${value}`;
-  const tabId = `${baseId}-tab-${value}`;
+  const panelId = baseId + "-panel-" + value;
+  const tabId = baseId + "-tab-" + value;
 
   if (!isActive) return null;
 
   return (
     <div
       role="tabpanel"
-      id={id}
+      id={panelId}
       aria-labelledby={tabId}
       className={cn("p-4 bg-surface-primary rounded-lg", className)}
     >

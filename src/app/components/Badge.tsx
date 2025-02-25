@@ -4,22 +4,55 @@ import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ReactNode } from "react";
 
+/**
+ * Available visual styles for the badge
+ */
 type BadgeVariant =
   | "primary"
   | "secondary"
   | "outline"
   | "success"
   | "warning"
-  | "error";
+  | "error"
+  | "destructive";
 type BadgeSize = "sm" | "md" | "lg";
 
+/**
+ * A badge component for displaying short status text, labels, or counts.
+ * Supports different visual styles and can contain icons or text.
+ *
+ * @example
+ * ```tsx
+ * // Basic usage
+ * <Badge>New</Badge>
+ *
+ * // Different variants
+ * <Badge variant="primary">Featured</Badge>
+ * <Badge variant="secondary">Draft</Badge>
+ * <Badge variant="outline">Archive</Badge>
+ * <Badge variant="destructive">Delete</Badge>
+ *
+ * // With icon
+ * <Badge>
+ *   <StarIcon className="w-4 h-4 mr-1" />
+ *   Featured
+ * </Badge>
+ * ```
+ */
 interface BadgeProps {
-  children: ReactNode;
+  /** Visual style variant of the badge */
   variant?: BadgeVariant;
-  size?: BadgeSize;
-  icon?: ReactNode;
-  onDismiss?: () => void;
+  /** Content of the badge */
+  children: ReactNode;
+  /** Additional CSS classes */
   className?: string;
+  /** Size of the badge */
+  size?: BadgeSize;
+  /** Icon to be displayed on the badge */
+  icon?: ReactNode;
+  /** Callback function to be called when the badge is dismissed */
+  onDismiss?: () => void;
+  /** Indicates if the badge is a status badge */
   isStatus?: boolean;
 }
 
@@ -51,6 +84,10 @@ const variantClasses: Record<
   error: {
     bg: "bg-error-light",
     text: "text-error",
+  },
+  destructive: {
+    bg: "bg-destructive-light",
+    text: "text-destructive",
   },
 };
 
