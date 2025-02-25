@@ -28,6 +28,14 @@ import {
   DropdownItem,
   DropdownDivider,
 } from "./components/DropdownMenu";
+import {
+  Card,
+  CardHeader,
+  CardBody,
+  CardFooter,
+  CardStat,
+} from "./components/Card";
+import { BarChart3, Info, ArrowRight } from "lucide-react";
 
 export default function Home() {
   const [switches, setSwitches] = useState({
@@ -126,6 +134,10 @@ export default function Home() {
 
   const handleDropdownAction = (action: string) => {
     console.log(`Dropdown action: ${action}`);
+  };
+
+  const handleCardClick = () => {
+    console.log("Card clicked");
   };
 
   return (
@@ -1334,6 +1346,132 @@ export default function Home() {
                     <DropdownItem disabled>More Actions</DropdownItem>
                   </DropdownContent>
                 </DropdownMenu>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Card Component Demo */}
+        <section>
+          <h2 className="app-h2 mb-8">Card Component</h2>
+          <div className="space-y-8">
+            {/* Basic Card */}
+            <div className="space-y-2">
+              <h3 className="app-h3 text-text-secondary">Basic Card</h3>
+              <div className="max-w-sm">
+                <Card>
+                  <CardHeader>Card Title</CardHeader>
+                  <CardBody>
+                    This is a basic card with header, body, and footer sections.
+                    Perfect for displaying structured content.
+                  </CardBody>
+                  <CardFooter>
+                    <Button variant="secondary" size="sm">
+                      Cancel
+                    </Button>
+                    <Button size="sm">Save</Button>
+                  </CardFooter>
+                </Card>
+              </div>
+            </div>
+
+            {/* Info Card */}
+            <div className="space-y-2">
+              <h3 className="app-h3 text-text-secondary">Info Card</h3>
+              <div className="max-w-sm">
+                <Card variant="info">
+                  <CardHeader icon={<Info className="w-5 h-5" />}>
+                    Important Notice
+                  </CardHeader>
+                  <CardBody>
+                    Your account settings have been updated. Please review the
+                    changes and confirm.
+                  </CardBody>
+                  <CardFooter>
+                    <Button size="sm">Review Changes</Button>
+                  </CardFooter>
+                </Card>
+              </div>
+            </div>
+
+            {/* Statistic Card */}
+            <div className="space-y-2">
+              <h3 className="app-h3 text-text-secondary">Statistic Card</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl">
+                <Card variant="statistic">
+                  <CardHeader icon={<BarChart3 className="w-5 h-5" />}>
+                    Performance
+                  </CardHeader>
+                  <CardBody>
+                    <CardStat
+                      value="2,845"
+                      label="Total Views"
+                      trend={{ value: 12.5, direction: "up" }}
+                    />
+                  </CardBody>
+                </Card>
+                <Card variant="statistic">
+                  <CardHeader icon={<Bell className="w-5 h-5" />}>
+                    Notifications
+                  </CardHeader>
+                  <CardBody>
+                    <CardStat
+                      value="184"
+                      label="Unread Messages"
+                      trend={{ value: 4.2, direction: "down" }}
+                    />
+                  </CardBody>
+                </Card>
+              </div>
+            </div>
+
+            {/* Interactive Card */}
+            <div className="space-y-2">
+              <h3 className="app-h3 text-text-secondary">Interactive Card</h3>
+              <div className="max-w-sm">
+                <Card variant="interactive" onClick={handleCardClick}>
+                  <CardBody className="flex items-center justify-between">
+                    <div>
+                      <h4 className="text-app-body font-medium">
+                        View All Settings
+                      </h4>
+                      <p className="text-app-body-sm text-text-secondary">
+                        Configure your account preferences
+                      </p>
+                    </div>
+                    <ArrowRight className="w-5 h-5 text-text-secondary" />
+                  </CardBody>
+                </Card>
+              </div>
+            </div>
+
+            {/* Card with Image */}
+            <div className="space-y-2">
+              <h3 className="app-h3 text-text-secondary">Card with Image</h3>
+              <div className="max-w-sm">
+                <Card image="https://images.unsplash.com/photo-1522071820081-009f0129c71c">
+                  <CardHeader>Team Collaboration</CardHeader>
+                  <CardBody>
+                    Enhance your team's productivity with our collaborative
+                    workspace tools and features.
+                  </CardBody>
+                  <CardFooter>
+                    <Button size="sm">Learn More</Button>
+                  </CardFooter>
+                </Card>
+              </div>
+            </div>
+
+            {/* Compact Card */}
+            <div className="space-y-2">
+              <h3 className="app-h3 text-text-secondary">Compact Card</h3>
+              <div className="max-w-sm">
+                <Card compact>
+                  <CardHeader>Quick Summary</CardHeader>
+                  <CardBody>
+                    A compact card with reduced padding for dense layouts.
+                  </CardBody>
+                </Card>
               </div>
             </div>
           </div>
