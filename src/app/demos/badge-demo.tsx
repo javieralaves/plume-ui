@@ -82,6 +82,18 @@ export function BadgeDemo() {
           </Badge>
         </div>
       </div>
+
+      <div className="space-y-4">
+        <h3 className="text-lg font-medium">Transaction Status</h3>
+        <div className="flex flex-wrap items-center gap-4">
+          <Badge transactionStatus="pending">Processing Transaction</Badge>
+          <Badge transactionStatus="success">Transaction Complete</Badge>
+          <Badge transactionStatus="failed">Transaction Failed</Badge>
+          <Badge transactionStatus="cooldown" cooldownRemaining={172800}>
+            Unstaking Period
+          </Badge>
+        </div>
+      </div>
     </section>
   );
 }

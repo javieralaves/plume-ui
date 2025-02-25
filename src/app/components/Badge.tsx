@@ -1,6 +1,6 @@
 "use client";
 
-import { X } from "lucide-react";
+import { X, Loader2, CheckCircle2, XCircle, Hourglass } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ReactNode } from "react";
 
@@ -15,11 +15,15 @@ type BadgeVariant =
   | "warning"
   | "error"
   | "destructive";
+
 type BadgeSize = "sm" | "md" | "lg";
+
+type TransactionStatusType = "pending" | "success" | "failed" | "cooldown";
 
 /**
  * A badge component for displaying short status text, labels, or counts.
  * Supports different visual styles and can contain icons or text.
+ * Can also be used to display transaction statuses with predefined styles.
  *
  * @example
  * ```tsx
@@ -32,11 +36,9 @@ type BadgeSize = "sm" | "md" | "lg";
  * <Badge variant="outline">Archive</Badge>
  * <Badge variant="destructive">Delete</Badge>
  *
- * // With icon
- * <Badge>
- *   <StarIcon className="w-4 h-4 mr-1" />
- *   Featured
- * </Badge>
+ * // Transaction status
+ * <Badge transactionStatus="pending">Processing...</Badge>
+ * <Badge transactionStatus="cooldown" cooldownRemaining={172800}>Unstaking</Badge>
  * ```
  */
 interface BadgeProps {
@@ -54,6 +56,10 @@ interface BadgeProps {
   onDismiss?: () => void;
   /** Indicates if the badge is a status badge */
   isStatus?: boolean;
+  /** Transaction status type for predefined transaction status styles */
+  transactionStatus?: TransactionStatusType;
+  /** Optional cooldown time remaining (in seconds) for cooldown status */
+  cooldownRemaining?: number;
 }
 
 const variantClasses: Record<
@@ -93,18 +99,47 @@ const variantClasses: Record<
 
 const sizeClasses: Record<BadgeSize, { container: string; icon: string }> = {
   sm: {
-    container: "text-app-caption px-2 py-0.5",
+    container: "text-app-caption px-2",
     icon: "w-3 h-3",
   },
   md: {
-    container: "text-app-body-sm px-2.5 py-0.5",
+    container: "text-app-body-sm px-2.5",
     icon: "w-3.5 h-3.5",
   },
   lg: {
-    container: "text-app-body px-3.5 py-1",
+    container: "text-app-body px-3.5",
     icon: "w-4 h-4",
   },
 };
+
+const transactionStatusConfig: Record<
+  TransactionStatusType,
+  { icon: ReactNode; variant: BadgeVariant }
+> = {
+  pending: {
+    icon: <Loader2 className="animate-spin" size={14} />,
+    variant: "secondary",
+  },
+  success: {
+    icon: <CheckCircle2 size={14} />,
+    variant: "success",
+  },
+  failed: {
+    icon: <XCircle size={14} />,
+    variant: "error",
+  },
+  cooldown: {
+    icon: <Hourglass size={14} />,
+    variant: "warning",
+  },
+};
+
+function formatCooldownTime(seconds: number): string {
+  if (seconds < 60) return `${seconds}s`;
+  if (seconds < 3600) return `${Math.floor(seconds / 60)}m`;
+  if (seconds < 86400) return `${Math.floor(seconds / 3600)}h`;
+  return `${Math.floor(seconds / 86400)}d`;
+}
 
 export function Badge({
   children,
@@ -114,16 +149,28 @@ export function Badge({
   onDismiss,
   className,
   isStatus,
+  transactionStatus,
+  cooldownRemaining,
 }: BadgeProps) {
-  const baseClasses = "inline-flex items-center gap-1 rounded-md font-medium";
-  const variantStyle = variantClasses[variant];
+  const baseClasses =
+    "inline-flex items-center gap-1.5 rounded-md font-medium min-h-[theme(spacing.6)]";
   const sizeStyle = sizeClasses[size];
+
+  // If transaction status is provided, use its predefined configuration
+  if (transactionStatus) {
+    const config = transactionStatusConfig[transactionStatus];
+    variant = config.variant;
+    icon = config.icon;
+  }
+
+  const variantStyle = variantClasses[variant];
 
   return (
     <div
       className={cn(
         baseClasses,
         sizeStyle.container,
+        "py-0.5", // Consistent vertical padding
         variantStyle.bg,
         variantStyle.text,
         variantStyle.border,
@@ -132,11 +179,17 @@ export function Badge({
       role={isStatus ? "status" : undefined}
     >
       {icon && (
-        <span className="flex-shrink-0" aria-hidden="true">
+        <span
+          className={cn("flex-shrink-0 flex items-center", sizeStyle.icon)}
+          aria-hidden="true"
+        >
           {icon}
         </span>
       )}
-      <span>{children}</span>
+      <span className="py-px">{children}</span>
+      {cooldownRemaining !== undefined && (
+        <span className="py-px">{formatCooldownTime(cooldownRemaining)}</span>
+      )}
       {onDismiss && (
         <button
           type="button"

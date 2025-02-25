@@ -29,7 +29,7 @@ export interface Toast {
   /** Optional title text displayed at the top of the toast */
   title?: string;
   /** Main message content of the toast */
-  message: string;
+  message: React.ReactNode;
   /** Duration in milliseconds before the toast auto-dismisses. Use Infinity to prevent auto-dismiss */
   duration?: number;
   /** Optional action button configuration */

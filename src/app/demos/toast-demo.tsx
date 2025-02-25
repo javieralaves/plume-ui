@@ -2,6 +2,7 @@
 
 import { Button } from "../components/Button";
 import { useToast } from "../components/Toast";
+import { Badge } from "../components/Badge";
 
 export function ToastDemo() {
   const { addToast } = useToast();
@@ -38,6 +39,49 @@ export function ToastDemo() {
     });
   };
 
+  const showTransactionPending = () => {
+    addToast({
+      title: "Transaction Initiated",
+      message: (
+        <div className="flex items-center gap-2">
+          <Badge transactionStatus="pending">Processing</Badge>
+          Sending 1.5 ETH to 0x1234...5678
+        </div>
+      ),
+      duration: 3000,
+    });
+  };
+
+  const showTransactionSuccess = () => {
+    addToast({
+      title: "Transaction Complete",
+      message: (
+        <div className="flex items-center gap-2">
+          <Badge transactionStatus="success">Success</Badge>
+          Transaction confirmed on network
+        </div>
+      ),
+      duration: 5000,
+      action: {
+        label: "View Transaction",
+        onClick: () => console.log("View transaction clicked"),
+      },
+    });
+  };
+
+  const showTransactionFailed = () => {
+    addToast({
+      title: "Transaction Failed",
+      message: (
+        <div className="flex items-center gap-2">
+          <Badge transactionStatus="failed">Failed</Badge>
+          Insufficient funds for gas
+        </div>
+      ),
+      duration: 5000,
+    });
+  };
+
   return (
     <section className="space-y-8">
       <div className="space-y-4">
@@ -59,6 +103,17 @@ export function ToastDemo() {
         <div className="flex flex-wrap gap-4">
           <Button onClick={showToastWithAction}>Show Toast with Action</Button>
           <Button onClick={showPersistentToast}>Show Persistent Toast</Button>
+        </div>
+      </div>
+
+      <div className="space-y-4">
+        <h3 className="text-lg font-medium">Transaction Status</h3>
+        <div className="flex flex-wrap gap-4">
+          <Button onClick={showTransactionPending}>Pending Transaction</Button>
+          <Button onClick={showTransactionSuccess}>
+            Successful Transaction
+          </Button>
+          <Button onClick={showTransactionFailed}>Failed Transaction</Button>
         </div>
       </div>
     </section>
