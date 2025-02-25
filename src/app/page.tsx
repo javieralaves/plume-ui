@@ -1189,9 +1189,10 @@ export default function Home() {
               {/* Badge Variants */}
               <div className="space-y-2">
                 <h3 className="app-h3 text-text-secondary">Badge Variants</h3>
-                <div className="flex gap-4 items-center">
-                  <Badge>Default</Badge>
+                <div className="flex flex-wrap gap-4 items-center">
                   <Badge variant="primary">Primary</Badge>
+                  <Badge variant="secondary">Secondary</Badge>
+                  <Badge variant="outline">Outline</Badge>
                   <Badge variant="success">Success</Badge>
                   <Badge variant="warning">Warning</Badge>
                   <Badge variant="error">Error</Badge>
@@ -1201,10 +1202,16 @@ export default function Home() {
               {/* Size Variants */}
               <div className="space-y-2">
                 <h3 className="app-h3 text-text-secondary">Size Variants</h3>
-                <div className="flex gap-4 items-center">
-                  <Badge size="sm">Small</Badge>
-                  <Badge size="md">Medium</Badge>
-                  <Badge size="lg">Large</Badge>
+                <div className="flex flex-wrap gap-4 items-center">
+                  <Badge size="sm" variant="primary">
+                    Small
+                  </Badge>
+                  <Badge size="md" variant="primary">
+                    Medium
+                  </Badge>
+                  <Badge size="lg" variant="primary">
+                    Large
+                  </Badge>
                 </div>
               </div>
 
@@ -1213,7 +1220,7 @@ export default function Home() {
                 <h3 className="app-h3 text-text-secondary">
                   Badges with Icons
                 </h3>
-                <div className="flex gap-4 items-center">
+                <div className="flex flex-wrap gap-4 items-center">
                   <Badge
                     variant="success"
                     icon={<CheckCircle className="w-3.5 h-3.5" />}
@@ -1245,19 +1252,11 @@ export default function Home() {
               <div className="space-y-2">
                 <h3 className="app-h3 text-text-secondary">Outline Badges</h3>
                 <div className="flex gap-4 items-center">
-                  <Badge outline>Default</Badge>
-                  <Badge variant="primary" outline>
-                    Primary
-                  </Badge>
-                  <Badge variant="success" outline>
-                    Success
-                  </Badge>
-                  <Badge variant="warning" outline>
-                    Warning
-                  </Badge>
-                  <Badge variant="error" outline>
-                    Error
-                  </Badge>
+                  <Badge>Default</Badge>
+                  <Badge variant="primary">Primary</Badge>
+                  <Badge variant="success">Success</Badge>
+                  <Badge variant="warning">Warning</Badge>
+                  <Badge variant="error">Error</Badge>
                 </div>
               </div>
 
