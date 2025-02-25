@@ -3,11 +3,14 @@ import { X } from "lucide-react";
 import { ReactNode, useEffect, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
+type DialogVariant = "default" | "form";
+
 interface DialogProps {
   isOpen: boolean;
   onClose: () => void;
   children: ReactNode;
   className?: string;
+  variant?: DialogVariant;
 }
 
 interface DialogTitleProps {
@@ -55,7 +58,13 @@ const dialogVariants = {
   },
 };
 
-export function Dialog({ isOpen, onClose, children, className }: DialogProps) {
+export function Dialog({
+  isOpen,
+  onClose,
+  children,
+  className,
+  variant = "default",
+}: DialogProps) {
   const dialogRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -111,7 +120,11 @@ export function Dialog({ isOpen, onClose, children, className }: DialogProps) {
               "relative w-[90%] sm:w-[500px]",
               // Styling
               "bg-white border border-border-light rounded-lg shadow-lg",
-              "p-6"
+              // Padding based on variant
+              variant === "form" ? "p-6" : "p-6",
+              // Variant-specific styles
+              variant === "form" && "space-y-4 form",
+              className
             )}
           >
             <button
@@ -135,9 +148,17 @@ export function Dialog({ isOpen, onClose, children, className }: DialogProps) {
 
 export function DialogTitle({ children, className }: DialogTitleProps) {
   return (
-    <h3 className={cn("text-app-h4 font-medium mb-2", className)}>
+    <div
+      className={cn(
+        "flex flex-col gap-1",
+        "[&:not(:last-child)]:mb-2",
+        // Increase spacing for form variant
+        "[.form_&]:mb-4",
+        className
+      )}
+    >
       {children}
-    </h3>
+    </div>
   );
 }
 
@@ -147,6 +168,8 @@ export function DialogBody({ children, className }: DialogBodyProps) {
       className={cn(
         "text-app-body text-text-primary",
         "max-h-[calc(80vh-8rem)] overflow-y-auto",
+        // Only apply flex column layout to form variant
+        "[.form_&]:flex [.form_&]:flex-col [.form_&]:gap-4",
         className
       )}
     >
@@ -157,7 +180,9 @@ export function DialogBody({ children, className }: DialogBodyProps) {
 
 export function DialogFooter({ children, className }: DialogFooterProps) {
   return (
-    <div className={cn("flex items-center justify-end gap-3 mt-6", className)}>
+    <div
+      className={cn("flex items-center gap-3 mt-6", "justify-end", className)}
+    >
       {children}
     </div>
   );

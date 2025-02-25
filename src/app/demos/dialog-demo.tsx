@@ -7,6 +7,8 @@ import {
   DialogFooter,
 } from "../components/Dialog";
 import { Button } from "../components/Button";
+import { Input } from "../components/Input";
+import { Textarea } from "../components/Textarea";
 import { useState } from "react";
 
 export function DialogDemo() {
@@ -14,6 +16,7 @@ export function DialogDemo() {
     basic: false,
     confirmation: false,
     scrollable: false,
+    form: false,
   });
 
   const openDialog = (key: keyof typeof dialogs) => {
@@ -22,6 +25,12 @@ export function DialogDemo() {
 
   const closeDialog = (key: keyof typeof dialogs) => {
     setDialogs((prev) => ({ ...prev, [key]: false }));
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log("Form submitted");
+    closeDialog("form");
   };
 
   return (
@@ -39,7 +48,9 @@ export function DialogDemo() {
           <Button onClick={() => openDialog("basic")}>Open Dialog</Button>
 
           <Dialog isOpen={dialogs.basic} onClose={() => closeDialog("basic")}>
-            <DialogTitle>Dialog Title</DialogTitle>
+            <DialogTitle>
+              <h3 className="text-app-h4 font-medium">Dialog Title</h3>
+            </DialogTitle>
             <DialogBody>
               <p>This is a basic dialog with a title and some content.</p>
             </DialogBody>
@@ -67,7 +78,9 @@ export function DialogDemo() {
             isOpen={dialogs.confirmation}
             onClose={() => closeDialog("confirmation")}
           >
-            <DialogTitle>Confirm Deletion</DialogTitle>
+            <DialogTitle>
+              <h3 className="text-app-h4 font-medium">Confirm Deletion</h3>
+            </DialogTitle>
             <DialogBody>
               <p>
                 Are you sure you want to delete this item? This action cannot be
@@ -103,7 +116,9 @@ export function DialogDemo() {
             isOpen={dialogs.scrollable}
             onClose={() => closeDialog("scrollable")}
           >
-            <DialogTitle>Terms of Service</DialogTitle>
+            <DialogTitle>
+              <h3 className="text-app-h4 font-medium">Terms of Service</h3>
+            </DialogTitle>
             <DialogBody>
               <div className="space-y-4">
                 <p>
@@ -145,6 +160,64 @@ export function DialogDemo() {
               </Button>
               <Button onClick={() => closeDialog("scrollable")}>Accept</Button>
             </DialogFooter>
+          </Dialog>
+        </div>
+      </div>
+
+      <div className="space-y-4">
+        <h3 className="text-lg font-medium">Form Dialog</h3>
+        <div className="flex flex-wrap gap-4">
+          <Button onClick={() => openDialog("form")}>Open Form Dialog</Button>
+
+          <Dialog
+            variant="form"
+            isOpen={dialogs.form}
+            onClose={() => closeDialog("form")}
+          >
+            <form onSubmit={handleSubmit}>
+              <DialogTitle>
+                <h3 className="text-lg font-semibold text-text-primary">
+                  Contact Form
+                </h3>
+                <p className="text-text-secondary">
+                  Fill in your details below
+                </p>
+              </DialogTitle>
+              <DialogBody>
+                <div>
+                  <Input
+                    label="Full Name"
+                    placeholder="Enter your full name"
+                    required
+                  />
+                </div>
+                <div>
+                  <Input
+                    type="email"
+                    label="Email"
+                    placeholder="Enter your email"
+                    required
+                  />
+                </div>
+                <div>
+                  <Textarea
+                    label="Message"
+                    placeholder="Enter your message"
+                    required
+                  />
+                </div>
+              </DialogBody>
+              <DialogFooter>
+                <Button
+                  variant="secondary"
+                  type="button"
+                  onClick={() => closeDialog("form")}
+                >
+                  Cancel
+                </Button>
+                <Button type="submit">Submit</Button>
+              </DialogFooter>
+            </form>
           </Dialog>
         </div>
       </div>
