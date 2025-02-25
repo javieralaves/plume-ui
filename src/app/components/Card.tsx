@@ -93,26 +93,6 @@ interface CardStatProps {
   className?: string;
 }
 
-/**
- * Title component for the card header
- */
-interface CardTitleProps {
-  /** Title content */
-  children: ReactNode;
-  /** Additional CSS classes */
-  className?: string;
-}
-
-/**
- * Description component for the card header
- */
-interface CardDescriptionProps {
-  /** Description content */
-  children: ReactNode;
-  /** Additional CSS classes */
-  className?: string;
-}
-
 export function Card({
   children,
   className,
