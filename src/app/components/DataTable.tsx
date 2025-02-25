@@ -169,7 +169,7 @@ export function DataTable<T>({
                 <th
                   key={column.key}
                   className={cn(
-                    "px-4 py-3 text-left text-app-body-sm font-medium uppercase",
+                    "px-4 py-3 text-left text-app-body-sm font-medium text-text-secondary",
                     column.sortable && "cursor-pointer select-none"
                   )}
                   onClick={() => column.sortable && handleSort(column.key)}
@@ -263,38 +263,37 @@ export function DataTable<T>({
         </table>
       </div>
 
-      {/* Pagination Controls */}
-      <div className="flex justify-between items-center py-3 px-4 border-t border-border-light">
-        <div className="text-app-body-sm text-text-secondary">
-          Page {currentPage} of {totalPages}
+      {totalPages > 1 && (
+        <div className="flex items-center justify-between px-4 py-3 border-t border-border-light">
+          <div className="text-sm text-text-secondary">
+            Page {currentPage} of {totalPages}
+          </div>
+          <div className="flex gap-2">
+            <button
+              onClick={handlePreviousPage}
+              disabled={currentPage === 1}
+              className={cn(
+                "px-3 py-1.5 text-sm font-medium rounded-md border border-border-light",
+                "bg-white text-text-primary hover:bg-neutral-50 disabled:opacity-50",
+                "disabled:cursor-not-allowed transition-colors"
+              )}
+            >
+              Previous
+            </button>
+            <button
+              onClick={handleNextPage}
+              disabled={currentPage === totalPages}
+              className={cn(
+                "px-3 py-1.5 text-sm font-medium rounded-md border border-border-light",
+                "bg-white text-text-primary hover:bg-neutral-50 disabled:opacity-50",
+                "disabled:cursor-not-allowed transition-colors"
+              )}
+            >
+              Next
+            </button>
+          </div>
         </div>
-        <div className="flex gap-2">
-          <button
-            className={cn(
-              "flex items-center gap-1 px-3 py-1 border border-border-medium rounded-md text-text-primary",
-              "hover:bg-surface-secondary transition-colors",
-              currentPage === 1 && "opacity-50 cursor-not-allowed"
-            )}
-            onClick={handlePreviousPage}
-            disabled={currentPage === 1}
-          >
-            <ChevronLeft className="w-4 h-4" />
-            Previous
-          </button>
-          <button
-            className={cn(
-              "flex items-center gap-1 px-3 py-1 border border-border-medium rounded-md text-text-primary",
-              "hover:bg-surface-secondary transition-colors",
-              currentPage === totalPages && "opacity-50 cursor-not-allowed"
-            )}
-            onClick={handleNextPage}
-            disabled={currentPage === totalPages}
-          >
-            Next
-            <ChevronRight className="w-4 h-4" />
-          </button>
-        </div>
-      </div>
+      )}
     </div>
   );
 }

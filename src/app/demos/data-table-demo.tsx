@@ -56,7 +56,7 @@ const columns: Column<User>[] = [
   },
   {
     key: "email",
-    header: "Email",
+    header: "Email Address",
     sortable: true,
   },
   {
