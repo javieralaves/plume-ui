@@ -11,6 +11,7 @@ import { Badge } from "./components/Badge";
 import { Input } from "./components/Input";
 import { CheckCircle, AlertTriangle, XCircle, Bell } from "lucide-react";
 import { useState } from "react";
+import { Textarea } from "./components/Textarea";
 
 export default function Home() {
   const [switches, setSwitches] = useState({
@@ -58,6 +59,12 @@ export default function Home() {
     date: "",
   });
 
+  const [textareaValues, setTextareaValues] = useState({
+    error: "This is an example of an invalid input",
+    disabled: "This textarea is disabled",
+    basic: "",
+  });
+
   const handleSwitchChange =
     (key: keyof typeof switches) => (checked: boolean) => {
       setSwitches((prev) => ({ ...prev, [key]: checked }));
@@ -93,6 +100,12 @@ export default function Home() {
     (key: keyof typeof inputValues) =>
     (e: React.ChangeEvent<HTMLInputElement>) => {
       setInputValues((prev) => ({ ...prev, [key]: e.target.value }));
+    };
+
+  const handleTextareaChange =
+    (key: keyof typeof textareaValues) =>
+    (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+      setTextareaValues((prev) => ({ ...prev, [key]: e.target.value }));
     };
 
   return (
@@ -1121,6 +1134,82 @@ export default function Home() {
                   label="Date"
                   value={inputValues.date}
                   onChange={handleInputChange("date")}
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Textarea Component Demo */}
+        <section>
+          <h2 className="app-h2 mb-8">Textarea Component</h2>
+          <div className="space-y-8">
+            {/* Basic Textarea */}
+            <div className="space-y-2">
+              <h3 className="app-h3 text-text-secondary">Basic Textarea</h3>
+              <div className="max-w-sm">
+                <Textarea
+                  placeholder="Enter your message here"
+                  value={textareaValues.basic}
+                  onChange={handleTextareaChange("basic")}
+                />
+              </div>
+            </div>
+
+            {/* Textarea with Label */}
+            <div className="space-y-2">
+              <h3 className="app-h3 text-text-secondary">
+                Textarea with Label
+              </h3>
+              <div className="max-w-sm">
+                <Textarea
+                  label="Message"
+                  placeholder="Type your message"
+                  value={textareaValues.basic}
+                  onChange={handleTextareaChange("basic")}
+                />
+              </div>
+            </div>
+
+            {/* Size Variants */}
+            <div className="space-y-2">
+              <h3 className="app-h3 text-text-secondary">Size Variants</h3>
+              <div className="max-w-sm space-y-4">
+                <Textarea
+                  size="sm"
+                  placeholder="Small textarea"
+                  label="Small Textarea"
+                />
+                <Textarea
+                  size="md"
+                  placeholder="Medium textarea"
+                  label="Medium Textarea"
+                />
+                <Textarea
+                  size="lg"
+                  placeholder="Large textarea"
+                  label="Large Textarea"
+                />
+              </div>
+            </div>
+
+            {/* Textarea States */}
+            <div className="space-y-2">
+              <h3 className="app-h3 text-text-secondary">Textarea States</h3>
+              <div className="max-w-sm space-y-4">
+                <Textarea
+                  label="Error State"
+                  placeholder="Error textarea"
+                  error="This field contains invalid input"
+                  value={textareaValues.error}
+                  onChange={handleTextareaChange("error")}
+                />
+                <Textarea
+                  label="Disabled State"
+                  placeholder="Disabled textarea"
+                  disabled
+                  value={textareaValues.disabled}
+                  onChange={handleTextareaChange("disabled")}
                 />
               </div>
             </div>

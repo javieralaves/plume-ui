@@ -1,0 +1,55 @@
+import { cn } from "@/lib/utils";
+import { TextareaHTMLAttributes, forwardRef } from "react";
+
+type TextareaSize = "sm" | "md" | "lg";
+
+interface TextareaProps
+  extends Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, "size"> {
+  label?: string;
+  error?: string;
+  size?: TextareaSize;
+}
+
+const sizeClasses = {
+  sm: "text-app-body-sm px-2 py-1 h-20",
+  md: "text-app-body px-3 py-2 h-32",
+  lg: "text-app-body px-4 py-3 h-48",
+} as const;
+
+export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
+  ({ className, label, error, size = "md", disabled, ...props }, ref) => {
+    return (
+      <div className="w-full">
+        {label && (
+          <label className="block text-app-body-sm font-medium text-text-primary mb-1">
+            {label}
+          </label>
+        )}
+        <textarea
+          ref={ref}
+          className={cn(
+            // Base styles
+            "w-full bg-white border border-border-medium shadow-sm rounded-md",
+            "text-text-primary placeholder:text-text-secondary",
+            "focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary",
+            // Size variants
+            sizeClasses[size],
+            // Error state
+            error && "border-error focus:border-error focus:ring-error/20",
+            // Disabled state
+            disabled &&
+              "bg-neutral-100 text-text-disabled cursor-not-allowed resize-none",
+            // Default resize behavior
+            !disabled && "resize-y",
+            className
+          )}
+          disabled={disabled}
+          {...props}
+        />
+        {error && <p className="mt-1 text-error text-app-caption">{error}</p>}
+      </div>
+    );
+  }
+);
+
+Textarea.displayName = "Textarea";
