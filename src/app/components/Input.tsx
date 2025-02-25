@@ -22,6 +22,8 @@ interface InputProps
   size?: InputSize;
   /** Additional CSS classes */
   className?: string;
+  /** Optional class name for the input element */
+  inputClassName?: string;
 }
 
 const sizeClasses: Record<InputSize, { container: string; input: string }> = {
@@ -67,6 +69,7 @@ export function Input({
   size = "md",
   className,
   disabled,
+  inputClassName,
   ...props
 }: InputProps) {
   const sizeStyle = sizeClasses[size];
@@ -93,7 +96,8 @@ export function Input({
             "focus:outline-none focus:ring-0 focus:border-primary",
             "disabled:bg-surface-secondary disabled:text-text-disabled disabled:cursor-not-allowed",
             error && "border-error",
-            sizeStyle.input
+            sizeStyle.input,
+            inputClassName
           )}
           disabled={disabled}
           {...props}
