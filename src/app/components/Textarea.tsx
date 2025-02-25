@@ -31,11 +31,11 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
             // Base styles
             "w-full bg-white border border-border-medium shadow-sm rounded-md",
             "text-text-primary placeholder:text-text-secondary",
-            "focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary",
+            "focus:outline-none focus:border-primary",
             // Size variants
             sizeClasses[size],
             // Error state
-            error && "border-error focus:border-error focus:ring-error/20",
+            error && "border-error focus:border-error",
             // Disabled state
             disabled &&
               "bg-neutral-100 text-text-disabled cursor-not-allowed resize-none",
