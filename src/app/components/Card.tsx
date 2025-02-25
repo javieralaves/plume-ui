@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils";
 import { ReactNode } from "react";
 import Image from "next/image";
 
-type CardVariant = "default" | "info" | "statistic" | "interactive";
+type CardVariant = "default" | "info" | "statistic" | "interactive" | "form";
 
 interface CardProps {
   children: ReactNode;
@@ -56,11 +56,12 @@ export function Card({
         "bg-white border border-border-light rounded-lg",
         "shadow-sm transition-all duration-200",
 
-        // Padding based on compact mode
-        compact ? "p-3" : "p-4",
+        // Padding based on variant and compact mode
+        variant === "form" ? "p-6" : compact ? "p-3" : "p-4",
 
         // Variant-specific styles
         variant === "interactive" && "cursor-pointer hover:bg-neutral-50",
+        variant === "form" && "shadow-sm space-y-4 form",
         isClickable && "hover:shadow-md",
 
         className
@@ -70,7 +71,12 @@ export function Card({
       tabIndex={isClickable ? 0 : undefined}
     >
       {image && (
-        <div className="relative -mx-4 -mt-4 mb-4 h-48 overflow-hidden rounded-t-lg">
+        <div
+          className={cn(
+            "relative -mx-4 -mt-4 mb-4 h-48 overflow-hidden rounded-t-lg",
+            variant === "form" && "-mx-6 -mt-6"
+          )}
+        >
           <Image
             src={image}
             alt=""
@@ -87,16 +93,31 @@ export function Card({
 
 export function CardHeader({ children, className, icon }: CardHeaderProps) {
   return (
-    <div className={cn("flex items-center gap-2 mb-2", className)}>
+    <div
+      className={cn(
+        "flex flex-col gap-1",
+        "[&:not(:last-child)]:mb-2",
+        // Increase spacing for form variant
+        "[.form_&]:mb-4",
+        className
+      )}
+    >
       {icon && <span className="text-text-secondary">{icon}</span>}
-      <h4 className="text-app-h4 font-medium text-text-primary">{children}</h4>
+      {children}
     </div>
   );
 }
 
 export function CardBody({ children, className }: CardBodyProps) {
   return (
-    <div className={cn("text-app-body text-text-primary", className)}>
+    <div
+      className={cn(
+        "text-app-body text-text-primary",
+        // Only apply flex column layout to form variant
+        "[.form_&]:flex [.form_&]:flex-col [.form_&]:gap-4",
+        className
+      )}
+    >
       {children}
     </div>
   );
@@ -107,7 +128,8 @@ export function CardFooter({ children, className }: CardFooterProps) {
     <div
       className={cn(
         "mt-4",
-        "flex items-center justify-between gap-4",
+        "flex items-center gap-3",
+        "justify-end",
         className
       )}
     >

@@ -9,10 +9,17 @@ import {
 } from "../components/Card";
 import { BarChart3, ArrowRight } from "lucide-react";
 import { Button } from "../components/Button";
+import { Input } from "../components/Input";
+import { Textarea } from "../components/Textarea";
 
 export function CardDemo() {
   const handleClick = () => {
     console.log("Card clicked");
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log("Form submitted");
   };
 
   return (
@@ -124,6 +131,54 @@ export function CardDemo() {
               </div>
               <ArrowRight className="w-5 h-5 text-text-secondary" />
             </CardBody>
+          </Card>
+        </div>
+      </div>
+
+      <div className="space-y-4">
+        <h3 className="text-lg font-medium">Form Card</h3>
+        <div className="max-w-md">
+          <Card variant="form">
+            <form onSubmit={handleSubmit}>
+              <CardHeader>
+                <h4 className="text-lg font-semibold text-text-primary">
+                  Contact Form
+                </h4>
+                <p className="text-text-secondary">
+                  Fill in your details below
+                </p>
+              </CardHeader>
+              <CardBody>
+                <div>
+                  <Input
+                    label="Full Name"
+                    placeholder="Enter your full name"
+                    required
+                  />
+                </div>
+                <div>
+                  <Input
+                    type="email"
+                    label="Email"
+                    placeholder="Enter your email"
+                    required
+                  />
+                </div>
+                <div>
+                  <Textarea
+                    label="Message"
+                    placeholder="Enter your message"
+                    required
+                  />
+                </div>
+              </CardBody>
+              <CardFooter>
+                <Button variant="secondary" type="button">
+                  Cancel
+                </Button>
+                <Button type="submit">Submit</Button>
+              </CardFooter>
+            </form>
           </Card>
         </div>
       </div>
