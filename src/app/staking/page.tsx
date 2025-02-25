@@ -259,7 +259,30 @@ export default function StakingDashboard() {
     try {
       // Simulate transaction delay
       await new Promise((resolve) => setTimeout(resolve, 2000));
+
+      // Update staked balance to 0 after successful unstake
+      setStakedBalance(0);
       setIsUnstakeDialogOpen(false);
+
+      addToast({
+        title: "Unstaking Initiated",
+        message: "Your PLUME will be available for withdrawal in 24 hours.",
+        duration: 5000,
+      });
+
+      // Add to rewards history as pending unstake
+      const newUnstake: RewardHistory = {
+        id: Date.now(),
+        date: new Date().toISOString(),
+        validator: selectedValidatorData?.name || "Unknown Validator",
+        amount: stakedBalance,
+        status: "Pending Unstake",
+        apr: selectedValidatorData?.apr || 0,
+        type: "Unstake",
+        cooldownRemaining: 24 * 60 * 60, // 24 hours in seconds
+      };
+
+      setRewardsHistory((current) => [newUnstake, ...current]);
     } catch {
       addToast({
         title: "Transaction Failed",
