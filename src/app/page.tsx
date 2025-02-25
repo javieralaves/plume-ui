@@ -15,120 +15,11 @@ import { CardDemo } from "./demos/card-demo";
 import { DialogDemo } from "./demos/dialog-demo";
 import { AccordionDemo } from "./demos/accordion-demo";
 import { SliderDemo } from "./demos/slider-demo";
-import { Avatar } from "./components/Avatar";
-import { Badge } from "./components/Badge";
-import { Input } from "./components/Input";
-import {
-  CheckCircle,
-  AlertTriangle,
-  XCircle,
-  Bell,
-  Settings,
-  User,
-  LogOut,
-  Mail,
-  ArrowRight,
-} from "lucide-react";
-import { useState } from "react";
-import { Textarea } from "./components/Textarea";
-import {
-  DropdownMenu,
-  DropdownTrigger,
-  DropdownContent,
-  DropdownItem,
-  DropdownDivider,
-} from "./components/DropdownMenu";
-import {
-  Card,
-  CardHeader,
-  CardBody,
-  CardFooter,
-  CardStat,
-} from "./components/Card";
-import { BarChart3, Info } from "lucide-react";
-import {
-  Dialog,
-  DialogTitle,
-  DialogBody,
-  DialogFooter,
-} from "./components/Dialog";
-import { Accordion, AccordionItem } from "./components/Accordion";
-import { Slider } from "./components/Slider";
-import { ToastProvider, useToast } from "./components/Toast";
-import { DataTable } from "./components/DataTable";
 import { DataTableDemo } from "./demos/data-table-demo";
 import { ToastDemo } from "./demos/toast-demo";
+import { ToastProvider } from "./components/Toast";
 
 export default function Home() {
-  const [radioValues, setRadioValues] = useState({
-    size: "medium",
-    fruit: "apple",
-    disabled: "option1",
-  });
-
-  const [activeTab, setActiveTab] = useState({
-    size: "tab1",
-    modern: "tab1",
-    traditional: "tab1",
-    demo: "tab1",
-  });
-
-  const [inputValues, setInputValues] = useState({
-    error: "Invalid value",
-    disabled: "Disabled input",
-    password: "",
-    number: "",
-    date: "",
-  });
-
-  const [textareaValues, setTextareaValues] = useState({
-    error: "This is an example of an invalid input",
-    disabled: "This textarea is disabled",
-    basic: "",
-  });
-
-  const [dialogs, setDialogs] = useState({
-    basic: false,
-    confirmation: false,
-    scrollable: false,
-  });
-
-  const [sliderValues, setSliderValues] = useState({
-    basic: 50,
-    withSteps: 40,
-    withLabels: 60,
-    range: [20, 80] as [number, number],
-    disabled: 30,
-  });
-
-  const handleInputChange =
-    (key: keyof typeof inputValues) =>
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setInputValues((prev) => ({ ...prev, [key]: e.target.value }));
-    };
-
-  const handleTextareaChange =
-    (key: keyof typeof textareaValues) =>
-    (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-      setTextareaValues((prev) => ({ ...prev, [key]: e.target.value }));
-    };
-
-  const handleDropdownAction = (action: string) => {
-    console.log(`Dropdown action: ${action}`);
-  };
-
-  const handleCardClick = () => {
-    console.log("Card clicked");
-  };
-
-  const openDialog = (key: keyof typeof dialogs) => {
-    setDialogs((prev) => ({ ...prev, [key]: true }));
-  };
-
-  const closeDialog = (key: keyof typeof dialogs) => {
-    setDialogs((prev) => ({ ...prev, [key]: false }));
-  };
-
   return (
     <ToastProvider>
       <div className="min-h-screen p-8 sm:p-20">
@@ -366,9 +257,6 @@ export default function Home() {
           <SliderDemo />
           <DataTableDemo />
           <ToastDemo />
-
-          {/* Rest of the components... */}
-          {/* ... existing code ... */}
         </main>
       </div>
     </ToastProvider>
