@@ -12,6 +12,87 @@ The project is organized into the following main directories:
   - `fonts.css` - Font configurations
 - `src/lib/` - Utility functions and shared code
 
+## Using Plume UI in Other Projects
+
+You can use Plume UI components and styles in other projects using Git submodules. Here's how:
+
+### 1. Add Plume UI as a Submodule
+
+```bash
+# In your project root
+git submodule add <plume-ui-repo-url> src/plume-ui
+```
+
+### 2. Configure Tailwind
+
+Create or update your `tailwind.config.ts`:
+
+```typescript
+import type { Config } from "tailwindcss";
+import plumeConfig from "./src/plume-ui/tailwind.config";
+
+export default {
+  // Extend Plume's config
+  ...plumeConfig,
+  content: [
+    ...plumeConfig.content,
+    // Add your project's content paths
+    "./src/**/*.{js,ts,jsx,tsx,mdx}",
+  ],
+} satisfies Config;
+```
+
+### 3. Install Required Dependencies
+
+Add these dependencies to your project's `package.json`:
+
+```json
+{
+  "dependencies": {
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "framer-motion": "^12.4.7",
+    "lucide-react": "^0.475.0",
+    "tailwind-merge": "^3.0.1"
+  }
+}
+```
+
+Then run:
+
+```bash
+npm install
+# or yarn install
+# or pnpm install
+```
+
+### 4. Import and Use Components
+
+You can now import and use Plume UI components in your project:
+
+```typescript
+import { Button } from "@/plume-ui/src/app/components/Button";
+import { Card } from "@/plume-ui/src/app/components/Card";
+
+// Use in your components
+export function MyComponent() {
+  return (
+    <Card>
+      <Button>Click me</Button>
+    </Card>
+  );
+}
+```
+
+### 5. Updating Plume UI
+
+To update to the latest version of Plume UI:
+
+```bash
+# In your project root
+git submodule update --remote src/plume-ui
+```
+
 ## Getting Started
 
 First, run the development server:
